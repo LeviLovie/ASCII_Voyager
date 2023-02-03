@@ -1,8 +1,0 @@
-2023/02/03 21:14:47 
-2023/02/03 21:14:47 Starting - main.go
-2023/02/03 21:14:47 Done - ClearScreen, InvisibleCursor
-2023/02/03 21:14:47 Started - keyBoardRead()
-2023/02/03 21:14:47 Starting, menu/menu.go
-2023/02/03 21:14:47 Menu - Done - ClearScreen, NotVisibleCursor, DrawLogo
-2023/02/03 21:14:47 Menu - Main loop starting
-2023/02/03 21:14:51 Menu - Exit
