@@ -22,7 +22,10 @@ func keyBoardRead(keys chan foo.KeyPress) {
 		if err != nil {
 			panic(err)
 		}
-		keys <- foo.KeyPress{char, key}
+		keys <- foo.KeyPress{
+			Char: char,
+			Key:  key,
+		}
 	}
 }
 
@@ -31,8 +34,9 @@ func main() {
 	foo.WriteToLogFile("Starting - main.go")
 
 	var keys = make(chan foo.KeyPress, 32)
-	var stage = 0
+	var stage = 1
 
+	foo.SetTerminalSize(175, 30)
 	foo.ClearScreen()
 	foo.NotVisibleCursor()
 	defer foo.VisibleCursor()
@@ -54,9 +58,11 @@ func main() {
 	// 	}
 	// }
 
-	if stage == 0 {
-		menu.Menu(keys)
-	} else if stage == 1 {
+	switch stage {
+	case 1:
+		stage = menu.Menu(keys)
+
+	case 0:
 		foo.WriteToLogFile("Exiting - main.go")
 		foo.ClearScreen()
 		foo.MoveCursor(0, 0)

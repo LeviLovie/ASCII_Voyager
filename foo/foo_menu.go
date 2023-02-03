@@ -2,7 +2,8 @@ package foo
 
 import "fmt"
 
-var MenuTasks = []string{"Open Demo", "Credits", "Exit"}
+var MenuTasks = []string{"Play", "Credits", "Exit"}
+var ManuCredits = []string{"LeviLovie", "Oto", "Learunaso"}
 
 func MenuDrawTasks(chose, x, y int) {
 	for i, task := range MenuTasks {
@@ -12,6 +13,14 @@ func MenuDrawTasks(chose, x, y int) {
 		} else {
 			fmt.Printf(task)
 		}
+	}
+}
+
+func MenuDrawCredits(x, y int, prefix string) {
+	for i, credit := range ManuCredits {
+		MoveCursor(x, y+i)
+		fmt.Printf(prefix, credit)
+		fmt.Printf(prefix, credit)
 	}
 }
 

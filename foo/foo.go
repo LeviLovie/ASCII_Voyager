@@ -13,8 +13,8 @@ var GameWidth = Width - (Width - 80)
 var Height = 40
 
 type KeyPress struct {
-	Key  rune
-	Code keyboard.Key
+	Char rune
+	Key  keyboard.Key
 }
 
 var TEXT_RED = "\033[38;5;196m"
