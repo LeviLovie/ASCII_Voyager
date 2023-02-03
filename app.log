@@ -1,0 +1,98 @@
+2023/02/03 01:04:29 
+2023/02/03 01:04:29 
+2023/02/03 01:04:29 
+2023/02/03 01:04:29 Main - Starting
+2023/02/03 01:04:29 Main - CurrentState:  0
+2023/02/03 01:04:29 Main - Menu case
+2023/02/03 01:04:29 
+2023/02/03 01:04:29 45, Menu - Starting
+2023/02/03 01:04:29 46, Menu - SetUp, DrawLogo: 
+2023/02/03 01:04:29 done
+2023/02/03 01:04:29 51, Menu - Opening chanels: 
+2023/02/03 01:04:29 done
+2023/02/03 01:04:29 56, Menu - defer exit function: 
+2023/02/03 01:04:29 done
+2023/02/03 01:04:29 64, Menu - go func
+2023/02/03 01:04:29 104, Menu - for loop
+2023/02/03 01:04:29 106, Menu - Redraw: 
+2023/02/03 01:04:29 
+2023/02/03 01:04:29 Redraw - ClearScreen, NotVisibleCursor, DrawLogo: 
+2023/02/03 01:04:29 done
+2023/02/03 01:04:29 Redraw - DrawTasks: 
+2023/02/03 01:04:29 done
+2023/02/03 01:04:29 done
+2023/02/03 01:04:29 119, Menu - select (keyCh):  0xc00006e300
+2023/02/03 01:04:56 
+2023/02/03 01:04:56 
+2023/02/03 01:04:56 
+2023/02/03 01:04:56 Main - Starting
+2023/02/03 01:04:56 Main - CurrentState:  0
+2023/02/03 01:04:56 Main - Menu case
+2023/02/03 01:04:56 
+2023/02/03 01:04:56 45, Menu - Starting
+2023/02/03 01:04:56 46, Menu - SetUp, DrawLogo: 
+2023/02/03 01:04:56 done
+2023/02/03 01:04:56 51, Menu - Opening chanels: 
+2023/02/03 01:04:56 done
+2023/02/03 01:04:56 56, Menu - defer exit function: 
+2023/02/03 01:04:56 done
+2023/02/03 01:04:56 64, Menu - go func
+2023/02/03 01:04:56 104, Menu - for loop
+2023/02/03 01:04:56 106, Menu - Redraw: 
+2023/02/03 01:04:56 
+2023/02/03 01:04:56 Redraw - ClearScreen, NotVisibleCursor, DrawLogo: 
+2023/02/03 01:04:56 done
+2023/02/03 01:04:56 Redraw - DrawTasks: 
+2023/02/03 01:04:56 done
+2023/02/03 01:04:56 done
+2023/02/03 01:04:56 119, Menu - select (keyCh):  0xc00006e300
+2023/02/03 01:06:30 
+2023/02/03 01:06:30 
+2023/02/03 01:06:30 
+2023/02/03 01:06:30 Main - Starting
+2023/02/03 01:06:30 Main - CurrentState:  0
+2023/02/03 01:06:30 Main - Menu case
+2023/02/03 01:06:30 
+2023/02/03 01:06:30 45, Menu - Starting
+2023/02/03 01:06:30 46, Menu - SetUp, DrawLogo: 
+2023/02/03 01:06:30 done
+2023/02/03 01:06:30 51, Menu - Opening chanels: 
+2023/02/03 01:06:30 done
+2023/02/03 01:06:30 56, Menu - defer exit function: 
+2023/02/03 01:06:30 done
+2023/02/03 01:06:30 64, Menu - go func for print from keyCh: 
+2023/02/03 01:06:30 done
+2023/02/03 01:06:30 64, Menu - go func
+2023/02/03 01:06:30 104, Menu - for loop
+2023/02/03 01:06:30 106, Menu - Redraw: 
+2023/02/03 01:06:30 
+2023/02/03 01:06:30 Redraw - ClearScreen, NotVisibleCursor, DrawLogo: 
+2023/02/03 01:06:30 done
+2023/02/03 01:06:30 Redraw - DrawTasks: 
+2023/02/03 01:06:30 done
+2023/02/03 01:06:30 done
+2023/02/03 01:06:30 119, Menu - select (keyCh):  0xc00008c300
+2023/02/03 01:07:55 
+2023/02/03 01:07:55 
+2023/02/03 01:07:55 
+2023/02/03 01:07:55 Main - Starting
+2023/02/03 01:07:55 Main - CurrentState:  0
+2023/02/03 01:07:55 Main - Menu case
+2023/02/03 01:07:55 
+2023/02/03 01:07:55 45, Menu - Starting
+2023/02/03 01:07:55 46, Menu - SetUp, DrawLogo: 
+2023/02/03 01:07:55 done
+2023/02/03 01:07:55 51, Menu - Opening chanels: 
+2023/02/03 01:07:55 done
+2023/02/03 01:07:55 56, Menu - defer exit function: 
+2023/02/03 01:07:55 done
+2023/02/03 01:07:55 64, Menu - go func
+2023/02/03 01:07:55 104, Menu - for loop
+2023/02/03 01:07:55 106, Menu - Redraw: 
+2023/02/03 01:07:55 
+2023/02/03 01:07:55 Redraw - ClearScreen, NotVisibleCursor, DrawLogo: 
+2023/02/03 01:07:55 done
+2023/02/03 01:07:55 Redraw - DrawTasks: 
+2023/02/03 01:07:55 done
+2023/02/03 01:07:55 done
+2023/02/03 01:07:55 119, Menu - select (keyCh):  0xc00006e300
