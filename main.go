@@ -8,7 +8,7 @@ import (
 	"github.com/eiannone/keyboard"
 )
 
-const FPS = 3
+const FPS = 30
 
 func keyBoardRead(keys chan foo.KeyPress) {
 	err := keyboard.Open()
@@ -48,7 +48,6 @@ func main() {
 	switch stage {
 	case 1:
 		stage = menu.Menu(keys)
-
 	case 0:
 		foo.WriteToLogFile("Exiting - main.go")
 		foo.ClearScreen()

@@ -2,6 +2,7 @@ package menu
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/LeviiLovie/ASCII_Voyager/foo"
 	"github.com/eiannone/keyboard"
@@ -21,10 +22,14 @@ func KeyBoard(keys chan foo.KeyPress) int {
 	case keyboard.KeyArrowUp:
 		if chose > 0 {
 			chose--
+		} else {
+			chose = len(foo.MenuTasks) - 1
 		}
 	case keyboard.KeyArrowDown:
 		if chose < len(foo.MenuTasks)-1 {
 			chose++
+		} else {
+			chose = 0
 		}
 	}
 
@@ -32,18 +37,26 @@ func KeyBoard(keys chan foo.KeyPress) int {
 	case 'w':
 		if chose > 0 {
 			chose--
+		} else {
+			chose = len(foo.MenuTasks) - 1
 		}
 	case 'W':
 		if chose > 0 {
 			chose--
+		} else {
+			chose = len(foo.MenuTasks) - 1
 		}
 	case 's':
 		if chose < len(foo.MenuTasks)-1 {
 			chose++
+		} else {
+			chose = 0
 		}
 	case 'S':
 		if chose < len(foo.MenuTasks)-1 {
 			chose++
+		} else {
+			chose = 0
 		}
 	}
 	return 1
@@ -75,5 +88,6 @@ func Menu(keys chan foo.KeyPress) int {
 				return 0
 			}
 		}
+		time.Sleep(time.Second / 30)
 	}
 }
