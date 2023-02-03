@@ -45,19 +45,6 @@ func main() {
 	go keyBoardRead(keys)
 	foo.WriteToLogFile("Started - keyBoardRead()")
 
-	// for {
-	// 	for val := range keys {
-	// 		switch val.Code {
-	// 		case keyboard.KeyEsc:
-	// 			foo.WriteToLogFile("Exiting - main.go")
-	// 			foo.ClearScreen()
-	// 			foo.MoveCursor(0, 0)
-	// 			fmt.Println("Goodbye!")
-	// 			return
-	// 		}
-	// 	}
-	// }
-
 	switch stage {
 	case 1:
 		stage = menu.Menu(keys)
@@ -69,25 +56,4 @@ func main() {
 		fmt.Println("Goodbye!")
 		return
 	}
-
-	// log.Println("Main - Starting")
-	// var currentState = state.Menu
-	// log.Println("Main - CurrentState: ", currentState)
-	// for {
-	// 	switch currentState {
-	// 	case state.Menu:
-	// 		log.Println("Main - Menu case")
-	// 		// currentState = menu.Menu()
-	// 	case state.Game:
-	// 		log.Println("Main - Game case")
-	// 		fmt.Println("Game 2")
-	// 		currentState = game.General(FPS)
-	// 	case state.Exit:
-	// 		log.Println("Main - Exit case")
-	// 		foo.ClearScreen()
-	// 		foo.VisibleCursor()
-	// 		fmt.Printf("Goodbye!\n")
-	// 		return
-	// 	}
-	// }
 }
