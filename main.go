@@ -2,46 +2,86 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"os"
 
 	"github.com/LeviiLovie/ASCII_Voyager/foo"
-	"github.com/LeviiLovie/ASCII_Voyager/game"
 	"github.com/LeviiLovie/ASCII_Voyager/menu"
-	"github.com/LeviiLovie/ASCII_Voyager/state"
+	"github.com/eiannone/keyboard"
 )
 
-const FPS = 30
+const FPS = 3
+
+func keyBoardRead(keys chan foo.KeyPress) {
+	err := keyboard.Open()
+	if err != nil {
+		panic(err)
+	}
+	defer keyboard.Close()
+
+	for {
+		char, key, err := keyboard.GetKey()
+		if err != nil {
+			panic(err)
+		}
+		keys <- foo.KeyPress{char, key}
+	}
+}
 
 func main() {
-	f, err := os.OpenFile("app.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalf("error opening file: %v", err)
-	}
-	defer f.Close()
-	log.SetOutput(f)
-	log.Println()
-	log.Println()
-	log.Println()
+	foo.WriteToLogFile("")
+	foo.WriteToLogFile("Starting - main.go")
 
-	log.Println("Main - Starting")
-	var currentState = state.Menu
-	log.Println("Main - CurrentState: ", currentState)
-	for {
-		switch currentState {
-		case state.Menu:
-			log.Println("Main - Menu case")
-			currentState = menu.Menu()
-		case state.Game:
-			log.Println("Main - Game case")
-			fmt.Println("Game 2")
-			currentState = game.General(FPS)
-		case state.Exit:
-			log.Println("Main - Exit case")
-			foo.ClearScreen()
-			foo.VisibleCursor()
-			fmt.Printf("Goodbye!\n")
-			return
-		}
+	var keys = make(chan foo.KeyPress, 32)
+	var stage = 0
+
+	foo.ClearScreen()
+	foo.NotVisibleCursor()
+	defer foo.VisibleCursor()
+	foo.WriteToLogFile("Done - ClearScreen, InvisibleCursor")
+
+	go keyBoardRead(keys)
+	foo.WriteToLogFile("Started - keyBoardRead()")
+
+	// for {
+	// 	for val := range keys {
+	// 		switch val.Code {
+	// 		case keyboard.KeyEsc:
+	// 			foo.WriteToLogFile("Exiting - main.go")
+	// 			foo.ClearScreen()
+	// 			foo.MoveCursor(0, 0)
+	// 			fmt.Println("Goodbye!")
+	// 			return
+	// 		}
+	// 	}
+	// }
+
+	if stage == 0 {
+		menu.Menu(keys)
+	} else if stage == 1 {
+		foo.WriteToLogFile("Exiting - main.go")
+		foo.ClearScreen()
+		foo.MoveCursor(0, 0)
+		fmt.Println("Goodbye!")
+		return
 	}
+
+	// log.Println("Main - Starting")
+	// var currentState = state.Menu
+	// log.Println("Main - CurrentState: ", currentState)
+	// for {
+	// 	switch currentState {
+	// 	case state.Menu:
+	// 		log.Println("Main - Menu case")
+	// 		// currentState = menu.Menu()
+	// 	case state.Game:
+	// 		log.Println("Main - Game case")
+	// 		fmt.Println("Game 2")
+	// 		currentState = game.General(FPS)
+	// 	case state.Exit:
+	// 		log.Println("Main - Exit case")
+	// 		foo.ClearScreen()
+	// 		foo.VisibleCursor()
+	// 		fmt.Printf("Goodbye!\n")
+	// 		return
+	// 	}
+	// }
 }
