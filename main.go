@@ -10,6 +10,7 @@ import (
 	"github.com/LeviiLovie/ASCII_Voyager/foo"
 	"github.com/LeviiLovie/ASCII_Voyager/game"
 	"github.com/LeviiLovie/ASCII_Voyager/menu"
+	"github.com/LeviiLovie/ASCII_Voyager/music"
 )
 
 const FPS = 30
@@ -39,6 +40,7 @@ func main() {
 	logrus.Debug("")
 	logrus.Debug("")
 	logrus.Debug("Starting main.go")
+	go music.Init()
 
 	defer func() {
 		if r := recover(); r != nil {
