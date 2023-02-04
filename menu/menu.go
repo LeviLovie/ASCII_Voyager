@@ -10,53 +10,24 @@ import (
 	"github.com/LeviiLovie/ASCII_Voyager/foo"
 )
 
-var chose = 0
-
-func keyBoard(keyPress foo.KeyPress) int {
+func keyBoard(chose foo.MenuItem, keyPress foo.KeyPress) (foo.MenuItem, bool) {
 	switch keyPress.Key {
 	case keyboard.KeyEnter:
-		return chose
+		return chose, true
 	case keyboard.KeyArrowUp:
-		if chose > 0 {
-			chose--
-		} else {
-			chose = len(foo.MenuTasks) - 1
-		}
+		return chose.Prev(), false
 	case keyboard.KeyArrowDown:
-		if chose < len(foo.MenuTasks)-1 {
-			chose++
-		} else {
-			chose = 0
-		}
+		return chose.Next(), false
 	}
 
 	switch keyPress.Char {
-	case 'w':
-		if chose > 0 {
-			chose--
-		} else {
-			chose = len(foo.MenuTasks) - 1
-		}
-	case 'W':
-		if chose > 0 {
-			chose--
-		} else {
-			chose = len(foo.MenuTasks) - 1
-		}
-	case 's':
-		if chose < len(foo.MenuTasks)-1 {
-			chose++
-		} else {
-			chose = 0
-		}
-	case 'S':
-		if chose < len(foo.MenuTasks)-1 {
-			chose++
-		} else {
-			chose = 0
-		}
+	case 'w', 'W':
+		return chose.Prev(), false
+	case 's', 'S':
+		return chose.Next(), false
 	}
-	return 1
+
+	return chose, false
 }
 
 func Menu(FPS int, keys chan foo.KeyPress) int {
@@ -65,6 +36,11 @@ func Menu(FPS int, keys chan foo.KeyPress) int {
 	foo.ClearScreen()
 	foo.NotVisibleCursor()
 	defer foo.VisibleCursor()
+
+	var (
+		chose    = foo.MenuItemNewGame
+		selected = false
+	)
 
 	logrus.Debugf("Menu - Main loop starting")
 	for {
@@ -78,16 +54,23 @@ func Menu(FPS int, keys chan foo.KeyPress) int {
 		default:
 		}
 
-		switch keyBoard(keyPress) {
-		case 0:
-			logrus.Debugf("Menu - Starting - Game")
-			return 2
-		case 2:
-			logrus.Debugf("Menu - Exit")
-			foo.ClearScreen()
-			foo.MoveCursor(0, 0)
-			fmt.Println("Goodbye!")
-			return 0
+		chose, selected = keyBoard(chose, keyPress)
+
+		if selected {
+			switch chose {
+			case foo.MenuItemNewGame:
+				logrus.Debugf("Menu - Starting - New Game")
+				return 2
+			case foo.MenuItemLoadGame:
+				logrus.Debugf("Menu - Starting - Load Game")
+				return 3
+			case foo.MenuItemExit:
+				logrus.Debugf("Menu - Exit")
+				foo.ClearScreen()
+				foo.MoveCursor(0, 0)
+				fmt.Println("Goodbye!")
+				return 0
+			}
 		}
 		time.Sleep(time.Second / 30)
 	}

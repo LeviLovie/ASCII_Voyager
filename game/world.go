@@ -8,13 +8,13 @@ import (
 )
 
 type GameWorld struct {
-	FPS             int
-	NeedRedraw      bool
-	Width           int
-	Height          int
-	World           [][]int // 0 - empty, 1 - wall
-	PlayerPositionX int
-	PlayerPositionY int
+	FPS             int     `json:"fps"`
+	NeedRedraw      bool    `json:"needRedraw"`
+	Width           int     `json:"width"`
+	Height          int     `json:"height"`
+	World           [][]int `json:"world"` // 0 - empty, 1 - wall
+	PlayerPositionX int     `json:"playerPositionX"`
+	PlayerPositionY int     `json:"playerPositionY"`
 }
 
 func (g *GameWorld) Init() {

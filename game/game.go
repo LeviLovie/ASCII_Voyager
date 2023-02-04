@@ -30,14 +30,15 @@ func keyBoard(keyPress foo.KeyPress, world *GameWorld) int {
 	return 1
 }
 
-func Game(FPS int, keys chan foo.KeyPress) int {
+func Game(FPS int, keys chan foo.KeyPress, save GameWorld) int {
 	logrus.Debugf("Starting - Game.go")
 
 	foo.ClearScreen()
 	foo.NotVisibleCursor()
 	defer foo.VisibleCursor()
 
-	var world = &GameWorld{}
+	var world *GameWorld = &save
+
 	world.Init()
 	logrus.Debugf("Game - Done - Init world")
 	logrus.Infof("Game - World size: %dx%d", world.Width, world.Height)

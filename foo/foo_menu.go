@@ -2,22 +2,61 @@ package foo
 
 import "fmt"
 
-var MenuTasks = []string{"Play", "Credits", "Exit"}
-var ManuCredits = []string{"LeviLovie", "Oto", "Learunaso"}
+type MenuItem int
 
-func MenuDrawTasks(chose, x, y int) {
-	for i, task := range MenuTasks {
-		MoveCursor(x, y+i)
-		if chose == i {
-			fmt.Printf(TEXT_WHITE_BOLD + task + TEXT_RESET)
+const (
+	MenuItemNewGame MenuItem = iota
+	MenuItemLoadGame
+	MenuItemCredits
+	MenuItemExit
+)
+
+var MenuTasks = []MenuItem{MenuItemNewGame, MenuItemLoadGame, MenuItemCredits, MenuItemExit}
+
+func (m MenuItem) String() string {
+	switch m {
+	case MenuItemNewGame:
+		return "New Game"
+	case MenuItemLoadGame:
+		return "Load Game"
+	case MenuItemCredits:
+		return "Credits"
+	case MenuItemExit:
+		return "Exit"
+	default:
+		return "Unknown"
+	}
+}
+
+func (m MenuItem) Next() MenuItem {
+	if m < MenuItemExit {
+		return m + 1
+	}
+	return MenuItemNewGame
+}
+
+func (m MenuItem) Prev() MenuItem {
+	if m > MenuItemNewGame {
+		return m - 1
+	}
+	return MenuItemExit
+}
+
+var MenuCredits = []string{"LeviLovie", "Oto", "Learunaso"}
+
+func MenuDrawTasks(chose MenuItem, x, y int) {
+	for _, item := range MenuTasks {
+		MoveCursor(x, y+int(item))
+		if chose == item {
+			fmt.Printf(TEXT_WHITE_BOLD + item.String() + TEXT_RESET)
 		} else {
-			fmt.Print(task)
+			fmt.Print(item.String())
 		}
 	}
 }
 
 func MenuDrawCredits(x, y int, prefix string) {
-	for i, credit := range ManuCredits {
+	for i, credit := range MenuCredits {
 		MoveCursor(x, y+i)
 		fmt.Printf(prefix, credit)
 		fmt.Printf(prefix, credit)

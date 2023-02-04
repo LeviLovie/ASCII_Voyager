@@ -9,6 +9,7 @@ import (
 
 	"github.com/LeviiLovie/ASCII_Voyager/foo"
 	"github.com/LeviiLovie/ASCII_Voyager/game"
+	"github.com/LeviiLovie/ASCII_Voyager/json"
 	"github.com/LeviiLovie/ASCII_Voyager/menu"
 	"github.com/LeviiLovie/ASCII_Voyager/music"
 )
@@ -41,6 +42,7 @@ func main() {
 	logrus.Debug("")
 	logrus.Debug("Starting main.go")
 	go music.Init()
+	// json.NewSave("test")
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -60,13 +62,19 @@ func main() {
 	go keyBoardRead(keys)
 	logrus.Debugf("Started - keyBoardRead()")
 
+	var save game.GameWorld
 	for {
 		logrus.Debugf("Stage %d", stage)
 		switch stage {
 		case 1:
 			stage = menu.Menu(FPS, keys)
 		case 2:
-			stage = game.Game(FPS, keys)
+			json.NewSave("test")
+			save = json.LoadSave("test")
+			stage = game.Game(FPS, keys, save)
+		case 3:
+			save = json.LoadSave("test")
+			stage = game.Game(FPS, keys, save)
 		case 0:
 			logrus.Debugf("Exiting - main.go")
 			foo.ClearScreen()
