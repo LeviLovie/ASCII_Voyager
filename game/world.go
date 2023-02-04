@@ -2,9 +2,9 @@ package game
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/LeviiLovie/ASCII_Voyager/foo"
+	"github.com/sirupsen/logrus"
 )
 
 type GameWorld struct {
@@ -22,6 +22,8 @@ func (g *GameWorld) Init() {
 	g.NeedRedraw = true
 	g.Width = 123
 	g.Height = 28
+	g.PlayerPositionX = 1
+	g.PlayerPositionY = 1
 	g.World = make([][]int, g.Height)
 	for i := range g.World {
 		g.World[i] = make([]int, g.Width)
@@ -51,11 +53,12 @@ func (g *GameWorld) Draw() {
 				fmt.Print("#")
 			default:
 				fmt.Print("!")
-				log.Printf("Game - Draw - Error - Unknown value in World array - '%d', in %d:%d", g.World[i][j], i, j)
+				logrus.Panicf("Game - Draw - Error - Unknown value in World array - '%d', in %d:%d", g.World[i][j], i, j)
 			}
 		}
+		fmt.Println()
 	}
-	foo.MoveCursor(g.PlayerPositionX, g.PlayerPositionY)
+	foo.MoveCursor(g.PlayerPositionX+1, g.PlayerPositionY+1)
 	fmt.Print(foo.TEXT_CYAN + "@" + foo.TEXT_RESET)
 	g.NeedRedraw = false
 }
