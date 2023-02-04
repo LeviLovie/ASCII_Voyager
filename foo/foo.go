@@ -6,6 +6,8 @@ import (
 	"os"
 
 	"github.com/eiannone/keyboard"
+	"github.com/sirupsen/logrus"
+	easy "github.com/t-tomalak/logrus-easy-formatter"
 )
 
 var Width = 175
@@ -32,15 +34,30 @@ func ClearScreen() {
 	fmt.Printf("\033[H\033[2J\033[3J")
 }
 
-func WriteToLogFile(text string) {
-	f, err := os.OpenFile("app.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+func InitLog() {
+	f, err := os.OpenFile("app.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}
-	defer f.Close()
 
-	log.SetOutput(f)
-	log.Println(text)
+	closeLogFile := func() {
+		if f != nil {
+			f.Close()
+		}
+	}
+	logrus.RegisterExitHandler(closeLogFile)
+
+	logrus.SetLevel(logrus.DebugLevel)
+	logrus.SetOutput(f)
+	logrus.SetFormatter(&easy.Formatter{
+		TimestampFormat: "15:04:05",
+		LogFormat:       "%time% [%lvl%] %msg%\n",
+	})
+
+	// logrus.SetFormatter(&logrus.TextFormatter{})
+	// logrus.SetOutput(f)
+
+	// log.SetOutput(f)
 }
 
 func NotVisibleCursor() {

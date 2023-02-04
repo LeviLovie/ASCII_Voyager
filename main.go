@@ -2,11 +2,14 @@ package main
 
 import (
 	"fmt"
+	"os"
+
+	"github.com/eiannone/keyboard"
+	"github.com/sirupsen/logrus"
 
 	"github.com/LeviiLovie/ASCII_Voyager/foo"
 	"github.com/LeviiLovie/ASCII_Voyager/game"
 	"github.com/LeviiLovie/ASCII_Voyager/menu"
-	"github.com/eiannone/keyboard"
 )
 
 const FPS = 30
@@ -31,8 +34,18 @@ func keyBoardRead(keys chan foo.KeyPress) {
 }
 
 func main() {
-	foo.WriteToLogFile("")
-	foo.WriteToLogFile("Starting - main.go")
+	foo.InitLog()
+	logrus.Debug("")
+	logrus.Debug("")
+	logrus.Debug("")
+	logrus.Debug("Starting main.go")
+
+	defer func() {
+		if r := recover(); r != nil {
+			logrus.Fatalf("Panic: %v", r)
+			os.Exit(1)
+		}
+	}()
 
 	var keys = make(chan foo.KeyPress, 32)
 	var stage = 1
@@ -41,23 +54,23 @@ func main() {
 	foo.ClearScreen()
 	foo.NotVisibleCursor()
 	defer foo.VisibleCursor()
-	foo.WriteToLogFile("Done - ClearScreen, InvisibleCursor")
 
 	go keyBoardRead(keys)
-	foo.WriteToLogFile("Started - keyBoardRead()")
+	logrus.Debugf("Started - keyBoardRead()")
 
 	for {
-		foo.WriteToLogFile(fmt.Sprintf("Stage: %d", stage))
+		logrus.Debugf("Stage %d", stage)
 		switch stage {
 		case 1:
 			stage = menu.Menu(FPS, keys)
 		case 2:
 			stage = game.Game(FPS, keys)
 		case 0:
-			foo.WriteToLogFile("Exiting - main.go")
+			logrus.Debugf("Exiting - main.go")
 			foo.ClearScreen()
 			foo.MoveCursor(0, 0)
 			fmt.Println("Goodbye!")
+			foo.SetTerminalSize(125, 25)
 			return
 		}
 	}

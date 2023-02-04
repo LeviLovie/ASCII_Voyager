@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/LeviiLovie/ASCII_Voyager/foo"
 )
@@ -19,11 +20,18 @@ type GameWorld struct {
 func (g *GameWorld) Init() {
 	g.FPS = 30
 	g.NeedRedraw = true
-	g.Width = 124
-	g.Height = 29
+	g.Width = 123
+	g.Height = 28
 	g.World = make([][]int, g.Height)
 	for i := range g.World {
 		g.World[i] = make([]int, g.Width)
+	}
+	for i := 0; i < g.Height; i++ {
+		for j := 0; j < g.Width; j++ {
+			if i == 0 || i == g.Height-1 || j == 0 || j == g.Width-1 {
+				g.World[i][j] = 1
+			}
+		}
 	}
 }
 
@@ -43,7 +51,7 @@ func (g *GameWorld) Draw() {
 				fmt.Print("#")
 			default:
 				fmt.Print("!")
-				foo.WriteToLogFile(fmt.Sprintf("Game - Draw - Error - Unknown value in World array - '%d', in %d:%d", g.World[i][j], i, j))
+				log.Printf("Game - Draw - Error - Unknown value in World array - '%d', in %d:%d", g.World[i][j], i, j)
 			}
 		}
 	}

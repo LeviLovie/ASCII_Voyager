@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/LeviiLovie/ASCII_Voyager/foo"
 	"github.com/eiannone/keyboard"
+	"github.com/sirupsen/logrus"
+
+	"github.com/LeviiLovie/ASCII_Voyager/foo"
 )
 
 var chose = 0
@@ -58,14 +60,13 @@ func keyBoard(keyPress foo.KeyPress) int {
 }
 
 func Menu(FPS int, keys chan foo.KeyPress) int {
-	foo.WriteToLogFile("Starting, menu/menu.go")
+	logrus.Debugf("Starting, menu/menu.go")
 
 	foo.ClearScreen()
 	foo.NotVisibleCursor()
 	defer foo.VisibleCursor()
-	foo.WriteToLogFile("Menu - Done - ClearScreen, NotVisibleCursor, DrawLogo")
 
-	foo.WriteToLogFile("Menu - Main loop starting")
+	logrus.Debugf("Menu - Main loop starting")
 	for {
 		foo.ClearScreen()
 		foo.MenuDrawLogo()
@@ -79,15 +80,13 @@ func Menu(FPS int, keys chan foo.KeyPress) int {
 
 		switch keyBoard(keyPress) {
 		case 0:
-			foo.WriteToLogFile("Menu - Game")
-			foo.WriteToLogFile("Menu - Send 2")
+			logrus.Debugf("Menu - Starting - Game")
 			return 2
 		case 2:
-			foo.WriteToLogFile("Menu - Exit")
+			logrus.Debugf("Menu - Exit")
 			foo.ClearScreen()
 			foo.MoveCursor(0, 0)
 			fmt.Println("Goodbye!")
-			foo.WriteToLogFile("Menu - Send 0")
 			return 0
 		}
 		time.Sleep(time.Second / 30)

@@ -1,0 +1,16 @@
+14:03:36 [DEBUG] 
+14:03:36 [DEBUG] 
+14:03:36 [DEBUG] 
+14:03:36 [DEBUG] Starting main.go
+14:03:36 [DEBUG] Started - keyBoardRead()
+14:03:36 [DEBUG] Stage 1
+14:03:36 [DEBUG] Starting, menu/menu.go
+14:03:36 [DEBUG] Menu - Main loop starting
+14:03:43 [DEBUG] Menu - Starting - Game
+14:03:43 [DEBUG] Stage 2
+14:03:43 [DEBUG] Starting - Game.go
+14:03:43 [DEBUG] Game - Done - Init world
+14:03:43 [INFO] Game - World size: 123x28
+14:03:43 [INFO] Game - Player position: 0x0
+14:03:43 [DEBUG] Game - Main loop starting
+14:03:48 [FATAL] Panic: runtime error: index out of range [-1]
