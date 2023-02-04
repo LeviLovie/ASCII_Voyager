@@ -53,7 +53,6 @@ func (g *GameWorld) Draw() {
 }
 
 func (g *GameWorld) SetPlayerPosition(x, y int) {
-	foo.WriteToLogFile(fmt.Sprintf("Game - SetPlayerPosition - %d:%d", x, y))
 	g.PlayerPositionX = x
 	g.PlayerPositionY = y
 	g.NeedRedraw = true
