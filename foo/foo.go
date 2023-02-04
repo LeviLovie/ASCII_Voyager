@@ -28,7 +28,8 @@ func SetTerminalSize(x, y int) {
 }
 
 func ClearScreen() {
-	fmt.Printf("\033[H\033[2J")
+	// fmt.Printf("\033[H\033[2J")
+	fmt.Printf("\033[H\033[2J\033[3J")
 }
 
 func WriteToLogFile(text string) {

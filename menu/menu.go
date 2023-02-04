@@ -10,15 +10,10 @@ import (
 
 var chose = 0
 
-func KeyBoard(keys chan foo.KeyPress) int {
-	var keyPress foo.KeyPress
-	select {
-	case keyPress = <-keys:
-	}
-
+func keyBoard(keyPress foo.KeyPress) int {
 	switch keyPress.Key {
 	case keyboard.KeyEnter:
-		return 0
+		return chose
 	case keyboard.KeyArrowUp:
 		if chose > 0 {
 			chose--
@@ -62,7 +57,7 @@ func KeyBoard(keys chan foo.KeyPress) int {
 	return 1
 }
 
-func Menu(keys chan foo.KeyPress) int {
+func Menu(FPS int, keys chan foo.KeyPress) int {
 	foo.WriteToLogFile("Starting, menu/menu.go")
 
 	foo.ClearScreen()
@@ -71,22 +66,29 @@ func Menu(keys chan foo.KeyPress) int {
 	foo.WriteToLogFile("Menu - Done - ClearScreen, NotVisibleCursor, DrawLogo")
 
 	foo.WriteToLogFile("Menu - Main loop starting")
-	var result int
 	for {
 		foo.ClearScreen()
 		foo.MenuDrawLogo()
 		foo.MenuDrawTasks(chose, 15, 15)
 
-		result = KeyBoard(keys)
-		if result == 0 {
-			switch chose {
-			case len(foo.MenuTasks) - 1:
-				foo.WriteToLogFile("Menu - Exit")
-				foo.ClearScreen()
-				foo.MoveCursor(0, 0)
-				fmt.Println("Goodbye!")
-				return 0
-			}
+		var keyPress foo.KeyPress
+		select {
+		case keyPress = <-keys:
+		default:
+		}
+
+		switch keyBoard(keyPress) {
+		case 0:
+			foo.WriteToLogFile("Menu - Game")
+			foo.WriteToLogFile("Menu - Send 2")
+			return 2
+		case 2:
+			foo.WriteToLogFile("Menu - Exit")
+			foo.ClearScreen()
+			foo.MoveCursor(0, 0)
+			fmt.Println("Goodbye!")
+			foo.WriteToLogFile("Menu - Send 0")
+			return 0
 		}
 		time.Sleep(time.Second / 30)
 	}

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/LeviiLovie/ASCII_Voyager/foo"
+	"github.com/LeviiLovie/ASCII_Voyager/game"
 	"github.com/LeviiLovie/ASCII_Voyager/menu"
 	"github.com/eiannone/keyboard"
 )
@@ -45,14 +46,19 @@ func main() {
 	go keyBoardRead(keys)
 	foo.WriteToLogFile("Started - keyBoardRead()")
 
-	switch stage {
-	case 1:
-		stage = menu.Menu(keys)
-	case 0:
-		foo.WriteToLogFile("Exiting - main.go")
-		foo.ClearScreen()
-		foo.MoveCursor(0, 0)
-		fmt.Println("Goodbye!")
-		return
+	for {
+		foo.WriteToLogFile(fmt.Sprintf("Stage: %d", stage))
+		switch stage {
+		case 1:
+			stage = menu.Menu(FPS, keys)
+		case 2:
+			stage = game.Game(FPS, keys)
+		case 0:
+			foo.WriteToLogFile("Exiting - main.go")
+			foo.ClearScreen()
+			foo.MoveCursor(0, 0)
+			fmt.Println("Goodbye!")
+			return
+		}
 	}
 }

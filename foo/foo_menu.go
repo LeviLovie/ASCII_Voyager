@@ -11,7 +11,7 @@ func MenuDrawTasks(chose, x, y int) {
 		if chose == i {
 			fmt.Printf(TEXT_WHITE_BOLD + task + TEXT_RESET)
 		} else {
-			fmt.Printf(task)
+			fmt.Print(task)
 		}
 	}
 }
