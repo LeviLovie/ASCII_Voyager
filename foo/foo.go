@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/eiannone/keyboard"
 	"github.com/sirupsen/logrus"
@@ -32,6 +33,24 @@ func SetTerminalSize(x, y int) {
 func ClearScreen() {
 	// fmt.Printf("\033[H\033[2J")
 	fmt.Printf("\033[H\033[2J\033[3J")
+}
+
+func GetFilesInDir() []string {
+	root := "./saves"
+	var files []string
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() && filepath.Ext(path) != ".json" {
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		fmt.Println(err)
+	}
+	return files
 }
 
 func InitLog() {
@@ -69,6 +88,12 @@ func VisibleCursor() {
 }
 
 func MoveCursor(x, y int) {
+	if x < 0 {
+		return
+	}
+	if y < 0 {
+		return
+	}
 	fmt.Printf("\033[%d;%dH", y, x)
 }
 

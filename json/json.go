@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/LeviiLovie/ASCII_Voyager/game"
+	"github.com/LeviiLovie/ASCII_Voyager/foo"
+	"github.com/sirupsen/logrus"
 )
 
 //go:embed default.json
@@ -25,16 +26,19 @@ func NewSave(name string) {
 	}
 }
 
-func LoadSave(name string) game.GameWorld {
+func LoadSave(name string) foo.GameWorld {
 	filename := fmt.Sprintf("./saves/%s.json", name)
+	logrus.Debug("Json - LoadSave: ", filename)
 
-	var save game.GameWorld
+	var save foo.GameWorld
 
 	f, err := os.ReadFile(filename)
 	if err != nil {
 		fmt.Printf("Error: %v", err)
 		os.Exit(1)
 	}
+
+	logrus.Debug("Json - LoadSave: ", string(f))
 
 	err = json.Unmarshal(f, &save)
 	if err != nil {
@@ -43,4 +47,19 @@ func LoadSave(name string) game.GameWorld {
 	}
 
 	return save
+}
+
+func SaveGame(name string, save foo.GameWorld) {
+	filename := fmt.Sprintf("./saves/%s.json", name)
+
+	f, err := json.Marshal(save)
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+		os.Exit(1)
+	}
+
+	err = os.WriteFile(filename, f, 0644)
+	if err != nil {
+		println("error:", err)
+	}
 }

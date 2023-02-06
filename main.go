@@ -36,12 +36,16 @@ func keyBoardRead(keys chan foo.KeyPress) {
 }
 
 func main() {
+	var playMusic bool = false
 	foo.InitLog()
 	logrus.Debug("")
 	logrus.Debug("")
 	logrus.Debug("")
 	logrus.Debug("Starting main.go")
-	go music.Init()
+
+	if playMusic {
+		go music.Init()
+	}
 	// json.NewSave("test")
 
 	defer func() {
@@ -62,19 +66,39 @@ func main() {
 	go keyBoardRead(keys)
 	logrus.Debugf("Started - keyBoardRead()")
 
-	var save game.GameWorld
+	var (
+		gameName    string
+		gameNameNew string
+		save        foo.GameWorld
+		saveNew     foo.GameWorld
+	)
 	for {
 		logrus.Debugf("Stage %d", stage)
 		switch stage {
 		case 1:
 			stage = menu.Menu(FPS, keys)
 		case 2:
-			json.NewSave("test")
-			save = json.LoadSave("test")
-			stage = game.Game(FPS, keys, save)
+			foo.ClearScreen()
+			foo.MenuDrawLogo()
+			foo.MoveCursor(15, 15)
+			fmt.Print("Enter game name: ")
+			foo.MoveCursor(15, 16)
+			gameName = foo.GetString(keys)
+			json.NewSave(gameName)
+			save = json.LoadSave(gameName)
+			stage, gameNameNew, saveNew = game.Game(FPS, keys, save, gameName)
+			json.SaveGame(gameNameNew, saveNew)
 		case 3:
-			save = json.LoadSave("test")
-			stage = game.Game(FPS, keys, save)
+			foo.ClearScreen()
+			foo.MenuDrawLogo()
+			foo.MoveCursor(15, 15)
+			fmt.Print("Enter game name: ")
+			foo.MoveCursor(15, 16)
+			gameName = foo.GetString(keys)
+			logrus.Infof("Loading game: '%s'", gameName)
+			save = json.LoadSave(gameName)
+			stage, gameNameNew, saveNew = game.Game(FPS, keys, save, gameName)
+			json.SaveGame(gameNameNew, saveNew)
 		case 0:
 			logrus.Debugf("Exiting - main.go")
 			foo.ClearScreen()

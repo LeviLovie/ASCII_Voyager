@@ -1,10 +1,7 @@
-package game
+package foo
 
 import (
 	"fmt"
-
-	"github.com/LeviiLovie/ASCII_Voyager/foo"
-	"github.com/sirupsen/logrus"
 )
 
 type GameWorld struct {
@@ -17,49 +14,28 @@ type GameWorld struct {
 	PlayerPositionY int     `json:"playerPositionY"`
 }
 
-func (g *GameWorld) Init() {
-	g.FPS = 30
-	g.NeedRedraw = true
-	g.Width = 123
-	g.Height = 28
-	g.PlayerPositionX = 1
-	g.PlayerPositionY = 1
-	g.World = make([][]int, g.Height)
-	for i := range g.World {
-		g.World[i] = make([]int, g.Width)
-	}
-	for i := 0; i < g.Height; i++ {
-		for j := 0; j < g.Width; j++ {
-			if i == 0 || i == g.Height-1 || j == 0 || j == g.Width-1 {
-				g.World[i][j] = 1
-			}
-		}
-	}
-}
-
 func (g *GameWorld) Draw() {
 	if !g.NeedRedraw {
 		return
 	}
 
-	foo.ClearScreen()
-	foo.MoveCursor(0, 0)
+	ClearScreen()
+	MoveCursor(0, 0)
 	for i := 0; i < g.Height; i++ {
 		for j := 0; j < g.Width; j++ {
 			switch g.World[i][j] {
 			case 0:
+				MoveCursor(j+(g.PlayerPositionX-((125-1)/2)), i+(g.PlayerPositionY-(29-1)/2))
 				fmt.Print(" ")
 			case 1:
+				MoveCursor(j+(g.PlayerPositionX-((125-1)/2)), i+(g.PlayerPositionY-(29-1)/2))
 				fmt.Print("#")
-			default:
-				fmt.Print("!")
-				logrus.Panicf("Game - Draw - Error - Unknown value in World array - '%d', in %d:%d", g.World[i][j], i, j)
 			}
 		}
 		fmt.Println()
 	}
-	foo.MoveCursor(g.PlayerPositionX+1, g.PlayerPositionY+1)
-	fmt.Print(foo.TEXT_CYAN + "@" + foo.TEXT_RESET)
+	MoveCursor(g.PlayerPositionX-((125-1)/2), g.PlayerPositionY-(29-1)/2)
+	fmt.Print(TEXT_CYAN + "@" + TEXT_RESET)
 	g.NeedRedraw = false
 }
 
