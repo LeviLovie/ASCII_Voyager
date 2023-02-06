@@ -34,7 +34,7 @@ func keyBoard(keyPress foo.KeyPress, world *foo.GameWorld) int {
 	return 1
 }
 
-func Game(FPS int, keys chan foo.KeyPress, save foo.GameWorld, gameName string) (int, string, foo.GameWorld) {
+func Game(FPS int, keys chan foo.KeyPress, save foo.GameWorld, gameName string) (foo.Stage, string, foo.GameWorld) {
 	logrus.Debugf("Starting - Game.go")
 
 	foo.ClearScreen()
@@ -65,7 +65,7 @@ func Game(FPS int, keys chan foo.KeyPress, save foo.GameWorld, gameName string) 
 			foo.ClearScreen()
 			foo.MoveCursor(0, 0)
 			fmt.Println("Goodbye!")
-			return 1, gameName, *world
+			return foo.StageMenu, gameName, *world
 		}
 		time.Sleep(time.Second / 30)
 	}

@@ -56,7 +56,7 @@ func main() {
 	}()
 
 	var keys = make(chan foo.KeyPress, 32)
-	var stage = 1
+	var stage = foo.StageMenu
 
 	foo.SetTerminalSize(175, 30)
 	foo.ClearScreen()
@@ -75,9 +75,9 @@ func main() {
 	for {
 		logrus.Debugf("Stage %d", stage)
 		switch stage {
-		case 1:
+		case foo.StageMenu:
 			stage = menu.Menu(FPS, keys)
-		case 2:
+		case foo.StageNewGame:
 			foo.ClearScreen()
 			foo.MenuDrawLogo()
 			foo.MoveCursor(15, 15)
@@ -88,7 +88,7 @@ func main() {
 			save = json.LoadSave(gameName)
 			stage, gameNameNew, saveNew = game.Game(FPS, keys, save, gameName)
 			json.SaveGame(gameNameNew, saveNew)
-		case 3:
+		case foo.StageLoadGame:
 			foo.ClearScreen()
 			foo.MenuDrawLogo()
 			foo.MoveCursor(15, 15)
@@ -99,7 +99,7 @@ func main() {
 			save = json.LoadSave(gameName)
 			stage, gameNameNew, saveNew = game.Game(FPS, keys, save, gameName)
 			json.SaveGame(gameNameNew, saveNew)
-		case 0:
+		case foo.StageExit:
 			logrus.Debugf("Exiting - main.go")
 			foo.ClearScreen()
 			foo.MoveCursor(0, 0)

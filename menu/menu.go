@@ -30,7 +30,7 @@ func keyBoard(chose foo.MenuItem, keyPress foo.KeyPress) (foo.MenuItem, bool) {
 	return chose, false
 }
 
-func Menu(FPS int, keys chan foo.KeyPress) int {
+func Menu(FPS int, keys chan foo.KeyPress) foo.Stage {
 	logrus.Debugf("Starting, menu/menu.go")
 
 	foo.ClearScreen()
@@ -60,16 +60,16 @@ func Menu(FPS int, keys chan foo.KeyPress) int {
 			switch chose {
 			case foo.MenuItemNewGame:
 				logrus.Debugf("Menu - Starting - New Game")
-				return 2
+				return foo.StageNewGame
 			case foo.MenuItemLoadGame:
 				logrus.Debugf("Menu - Starting - Load Game")
-				return 3
+				return foo.StageLoadGame
 			case foo.MenuItemExit:
 				logrus.Debugf("Menu - Exit")
 				foo.ClearScreen()
 				foo.MoveCursor(0, 0)
 				fmt.Println("Goodbye!")
-				return 0
+				return foo.StageExit
 			}
 		}
 		time.Sleep(time.Second / 30)
