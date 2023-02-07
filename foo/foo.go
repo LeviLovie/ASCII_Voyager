@@ -16,11 +16,27 @@ type KeyPress struct {
 	Key  keyboard.Key
 }
 
-var TEXT_RED = "\033[38;5;196m"
-var TEXT_CYAN = "\033[38;5;51m"
-var TEXT_CYAN_LIGHT = "\033[38;5;87m"
-var TEXT_WHITE_BOLD = "\033[38;5;0;48;5;255m"
-var TEXT_RESET = "\033[38;5;255;48;5;0m"
+var (
+	TEXT_BLACK         = "\033[38;5;0m"
+	TEXT_RED           = "\033[38;5;1m"
+	TEXT_GREEN         = "\033[38;5;2m"
+	TEXT_YELLOW        = "\033[38;5;3m"
+	TEXT_BLUE          = "\033[38;5;4m"
+	TEXT_MAGENTA       = "\033[38;5;5m"
+	TEXT_CYAN          = "\033[38;5;6m"
+	TEXT_WHITE         = "\033[38;5;7m"
+	TEXT_LIGHT_BLACK   = "\033[38;5;8m"
+	TEXT_LIGHT_RED     = "\033[38;5;9m"
+	TEXT_LIGHT_GREEN   = "\033[38;5;10m"
+	TEXT_LIGHT_YELLOW  = "\033[38;5;11m"
+	TEXT_LIGHT_BLUE    = "\033[38;5;12m"
+	TEXT_LIGHT_MAGENTA = "\033[38;5;13m"
+	TEXT_LIGHT_CYAN    = "\033[38;5;14m"
+	TEXT_LIGHT_WHITE   = "\033[38;5;15m"
+	TEXT_LIGHT_ORANGE  = "\033[38;5;214m"
+	TEXT_WHITE_BOLD    = "\033[38;5;0;48;5;255m"
+	TEXT_RESET         = "\033[0m"
+)
 
 func SetTerminalSize(x, y int) {
 	fmt.Printf("\033[8;%d;%dt", y, x)
