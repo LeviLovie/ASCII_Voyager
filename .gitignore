@@ -22,4 +22,4 @@ vendor/
 *.log
 
 # Saves
-saves.json
+saves/*.json
