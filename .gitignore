@@ -20,3 +20,6 @@ vendor/
 
 # Logs and databases
 *.log
+
+# Saves
+saves.json
