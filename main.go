@@ -1,13 +1,14 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"github.com/LeviiLovie/ASCII_Voyager/editor"
 	"os"
 
 	"github.com/eiannone/keyboard"
 	"github.com/sirupsen/logrus"
 
-	"github.com/LeviiLovie/ASCII_Voyager/editor"
 	"github.com/LeviiLovie/ASCII_Voyager/foo"
 	"github.com/LeviiLovie/ASCII_Voyager/game"
 	"github.com/LeviiLovie/ASCII_Voyager/json"
@@ -37,82 +38,99 @@ func keyBoardRead(keys chan foo.KeyPress) {
 }
 
 func main() {
-	if len(os.Args) > 1 {
-		if os.Args[1] == "--editor" {
-			editor.Editor()
+	var (
+		runEditor bool
+		noMusic   bool
+		help      bool
+	)
+
+	flag.BoolVar(&runEditor, "editor", false, "Start editor")
+	flag.BoolVar(&noMusic, "no-music", false, "Disable music")
+	flag.BoolVar(&help, "help", false, "Show help")
+	flag.Parse()
+
+	if help {
+		fmt.Println("ASCII Voyager")
+		fmt.Println("  -editor\tStart editor")
+		fmt.Println("  -no-music\tDisable music")
+		fmt.Println("  -help\t\tShow help")
+		return
+	}
+
+	if runEditor {
+		editor.Editor()
+		return
+	}
+
+	foo.InitLog()
+	logrus.Debug("")
+	logrus.Debug("")
+	logrus.Debug("")
+	logrus.Debug("Starting main.go")
+
+	if !noMusic {
+		go music.Init()
+	}
+	// json.NewSave("test")
+
+	defer func() {
+		if r := recover(); r != nil {
+			logrus.Fatalf("Panic: %v", r)
+			os.Exit(1)
 		}
-	} else {
-		var playMusic bool = true
-		foo.InitLog()
-		logrus.Debug("")
-		logrus.Debug("")
-		logrus.Debug("")
-		logrus.Debug("Starting main.go")
+	}()
 
-		if playMusic {
-			go music.Init()
-		}
-		// json.NewSave("test")
+	var keys = make(chan foo.KeyPress, 32)
+	var stage = foo.StageMenu
 
-		defer func() {
-			if r := recover(); r != nil {
-				logrus.Fatalf("Panic: %v", r)
-				os.Exit(1)
-			}
-		}()
+	foo.SetTerminalSize(foo.TerminalWidth, foo.TerminalHeight)
+	foo.ClearScreen()
+	foo.NotVisibleCursor()
+	defer foo.VisibleCursor()
 
-		var keys = make(chan foo.KeyPress, 32)
-		var stage = foo.StageMenu
+	go keyBoardRead(keys)
+	logrus.Debugf("Started - keyBoardRead()")
 
-		foo.SetTerminalSize(foo.TerminalWidth, foo.TerminalHeight)
-		foo.ClearScreen()
-		foo.NotVisibleCursor()
-		defer foo.VisibleCursor()
-
-		go keyBoardRead(keys)
-		logrus.Debugf("Started - keyBoardRead()")
-
-		var (
-			gameName    string
-			gameNameNew string
-			save        foo.GameWorld
-			saveNew     foo.GameWorld
-		)
-		for {
-			logrus.Debugf("Stage %d", stage)
-			switch stage {
-			case foo.StageMenu:
-				stage = menu.Menu(FPS, keys)
-			case foo.StageNewGame:
-				foo.ClearScreen()
-				foo.MenuDrawLogo()
-				foo.MoveCursor(15, 15)
-				fmt.Print("Enter game name: ")
-				foo.MoveCursor(15, 16)
-				gameName = foo.GetString(keys)
-				json.NewSave(gameName)
-				save = json.LoadSave(gameName)
-				stage, gameNameNew, saveNew = game.Game(FPS, keys, save, gameName)
-				json.SaveGame(gameNameNew, saveNew)
-			case foo.StageLoadGame:
-				foo.ClearScreen()
-				foo.MenuDrawLogo()
-				foo.MoveCursor(15, 15)
-				fmt.Print("Enter game name: ")
-				foo.MoveCursor(15, 16)
-				gameName = foo.GetString(keys)
-				logrus.Infof("Loading game: '%s'", gameName)
-				save = json.LoadSave(gameName)
-				stage, gameNameNew, saveNew = game.Game(FPS, keys, save, gameName)
-				json.SaveGame(gameNameNew, saveNew)
-			case foo.StageExit:
-				logrus.Debugf("Exiting - main.go")
-				foo.ClearScreen()
-				foo.MoveCursor(0, 0)
-				fmt.Println("Goodbye!")
-				foo.SetTerminalSize(125, 25)
-				return
-			}
+	var (
+		gameName    string
+		gameNameNew string
+		save        foo.GameWorld
+		saveNew     foo.GameWorld
+	)
+	for {
+		logrus.Debugf("Stage %d", stage)
+		switch stage {
+		case foo.StageMenu:
+			stage = menu.Menu(FPS, keys)
+		case foo.StageNewGame:
+			foo.ClearScreen()
+			foo.MenuDrawLogo()
+			foo.MoveCursor(15, 15)
+			fmt.Print("Enter game name: ")
+			foo.MoveCursor(15, 16)
+			gameName = foo.GetString(keys)
+			json.NewSave(gameName)
+			save = json.LoadSave(gameName)
+			stage, gameNameNew, saveNew = game.Game(FPS, keys, save, gameName)
+			json.SaveGame(gameNameNew, saveNew)
+		case foo.StageLoadGame:
+			foo.ClearScreen()
+			foo.MenuDrawLogo()
+			foo.MoveCursor(15, 15)
+			fmt.Print("Enter game name: ")
+			foo.MoveCursor(15, 16)
+			gameName = foo.GetString(keys)
+			logrus.Infof("Loading game: '%s'", gameName)
+			save = json.LoadSave(gameName)
+			stage, gameNameNew, saveNew = game.Game(FPS, keys, save, gameName)
+			json.SaveGame(gameNameNew, saveNew)
+		case foo.StageExit:
+			logrus.Debugf("Exiting - main.go")
+			foo.ClearScreen()
+			foo.MoveCursor(0, 0)
+			fmt.Println("Goodbye!")
+			foo.SetTerminalSize(125, 25)
+			return
 		}
 	}
 }
