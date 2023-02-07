@@ -3,8 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/LeviiLovie/ASCII_Voyager/editor"
 	"os"
+
+	"github.com/LeviiLovie/ASCII_Voyager/editor"
 
 	"github.com/eiannone/keyboard"
 	"github.com/sirupsen/logrus"
@@ -71,7 +72,6 @@ func main() {
 	if !noMusic {
 		go music.Init()
 	}
-	// json.NewSave("test")
 
 	defer func() {
 		if r := recover(); r != nil {

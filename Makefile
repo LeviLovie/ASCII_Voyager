@@ -1,7 +1,12 @@
+.PHONY: run editor build mod
+
 run:
 	@go run main.go
 
-openEditor:
+runOffMus:
+	@go run main.go --no-music
+
+editor:
 	@go run main.go --editor
 
 objectBuild:
