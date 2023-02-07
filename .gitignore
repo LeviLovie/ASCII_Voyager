@@ -16,11 +16,11 @@
 *.out
 
 # Dependency directories (remove the comment below to include it)
-vendor/
+vendor/*
 
 # Logs and databases
 *.log
 
 # Saves
-saves/
+saves/*
 saves/*.dat
