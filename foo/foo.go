@@ -11,10 +11,6 @@ import (
 	easy "github.com/t-tomalak/logrus-easy-formatter"
 )
 
-var Width = 175
-var GameWidth = Width - (Width - 80)
-var Height = 40
-
 type KeyPress struct {
 	Char rune
 	Key  keyboard.Key
@@ -97,6 +93,16 @@ func MoveCursor(x, y int) {
 	fmt.Printf("\033[%d;%dH", y, x)
 }
 
+func PrintAt(x, y int, text string, args ...interface{}) {
+	if x < 0 {
+		return
+	}
+	if y < 0 {
+		return
+	}
+	fmt.Printf("\033[%d;%dH%s", y, x, fmt.Sprintf(text, args...))
+}
+
 func DrawVerticalSplitLine(height int) {
 	for y := 0; y < height-1; y++ {
 		MoveCursor(80, y)
@@ -116,11 +122,6 @@ func SetColor(color string) {
 
 func ResetColor() {
 	fmt.Printf("\033[0m")
-}
-
-func PrintAt(x, y int, text string) {
-	MoveCursor(x, y)
-	fmt.Print(text)
 }
 
 func PrintAtColor(x, y int, color string, text string) {

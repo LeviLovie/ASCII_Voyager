@@ -46,7 +46,7 @@ func Game(FPS int, keys chan foo.KeyPress, save foo.GameWorld, gameName string) 
 
 	logrus.Debugf("Game - Done - Init world")
 	logrus.Infof("Game - World size: %dx%d", world.Width, world.Height)
-	logrus.Infof("Game - Player position: %dx%d", world.PlayerPositionX, world.PlayerPositionY)
+	logrus.Infof("Game - Player position: %dx%d", world.Player.X, world.Player.Y)
 
 	logrus.Debugf("Game - Main loop starting")
 	world.NeedRedraw = true

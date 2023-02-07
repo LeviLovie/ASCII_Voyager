@@ -58,7 +58,7 @@ func main() {
 	var keys = make(chan foo.KeyPress, 32)
 	var stage = foo.StageMenu
 
-	foo.SetTerminalSize(175, 30)
+	foo.SetTerminalSize(foo.TerminalWidth, foo.TerminalHeight)
 	foo.ClearScreen()
 	foo.NotVisibleCursor()
 	defer foo.VisibleCursor()
