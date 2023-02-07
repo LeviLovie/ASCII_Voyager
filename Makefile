@@ -1,6 +1,9 @@
 run:
 	@go run main.go
 
+openEditor:
+	@go run main.go --editor
+
 objectBuild:
 	@mkdir -p build/$(VERSION)
 	@go build -o build/$(VERSION)/ASCII_Voyager main.go

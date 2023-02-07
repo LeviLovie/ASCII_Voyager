@@ -1,7 +1,9 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"github.com/LeviiLovie/ASCII_Voyager/editor"
 	"os"
 
 	"github.com/eiannone/keyboard"
@@ -36,14 +38,37 @@ func keyBoardRead(keys chan foo.KeyPress) {
 }
 
 func main() {
-	var playMusic bool = false
+	var (
+		runEditor bool
+		noMusic   bool
+		help      bool
+	)
+
+	flag.BoolVar(&runEditor, "editor", false, "Start editor")
+	flag.BoolVar(&noMusic, "no-music", false, "Disable music")
+	flag.BoolVar(&help, "help", false, "Show help")
+	flag.Parse()
+
+	if help {
+		fmt.Println("ASCII Voyager")
+		fmt.Println("  -editor\tStart editor")
+		fmt.Println("  -no-music\tDisable music")
+		fmt.Println("  -help\t\tShow help")
+		return
+	}
+
+	if runEditor {
+		editor.Editor()
+		return
+	}
+
 	foo.InitLog()
 	logrus.Debug("")
 	logrus.Debug("")
 	logrus.Debug("")
 	logrus.Debug("Starting main.go")
 
-	if playMusic {
+	if !noMusic {
 		go music.Init()
 	}
 	// json.NewSave("test")

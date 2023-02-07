@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Voyager Editor</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: black;
+            color: white;
+            font: 1.3rem Inconsolata, monospace;
+            text-shadow: 0 0 5px #C8C8C8;
+        }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        td {
+            font-family: monospace;
+            /*border: 1px solid #333;*/
+            height: 40px;
+            width: 20px;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            user-select: none;
+        }
+        td:hover {
+            background-color: #333;
+        }
+        #controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        #controls button {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border: none;
+            background-color: #333;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+        #controls button:hover {
+            background-color: #555;
+        }
+        #controls button.selected {
+            background-color: #777;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        {{ range $r, $row := .world }}
+            <tr>
+            {{ range $c, $cell := $row }}
+                <td>
+                    {{ if and (eq $r $.playerX) (eq $c $.playerY) }}
+                        @
+                    {{ else }}
+                        {{ if eq $cell 0 }}
+                            .
+                        {{ else }}
+                            {{ if eq $cell 1 }}
+                            #
+                            {{ else }}
+                            {{ $cell }}
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                </td>
+            {{ end }}
+            </tr>
+        {{ end }}
+    </table>
+    <div id="controls">
+        <button id="space" onclick="setValue('.')" class="selected">.</button>
+        <button id="wall" onclick="setValue('#')">#</button>
+        <button onclick="save()">Save</button>
+    </div>
+<script>
+    let value = "."
+    const data = JSON.parse("{{ .saveRaw }}");
+
+    function setValue(val) {
+        value = val;
+        if (val === ".") {
+            document.getElementById("wall").classList.remove("selected");
+            document.getElementById("space").classList.add("selected");
+        } else if (val === "#") {
+            document.getElementById("space").classList.remove("selected");
+            document.getElementById("wall").classList.add("selected");
+        }
+    }
+
+    function click(event) {
+        event.target.innerHTML = value;
+    }
+
+    function save() {
+        let newData = {...data, world: []};
+
+        [...document.getElementsByTagName("tr")].forEach((tr, i) => {
+            newData.world[i] = [];
+            [...tr.getElementsByTagName("td")].forEach((td, j) => {
+                const val = td.innerHTML.replace(/^[\s\n]*/, "").replace(/[\s\n]*$/, "");
+                switch (val) {
+                    case '#':
+                        newData.world[i][j] = 1;
+                        break;
+                    case '.':
+                        newData.world[i][j] = 0;
+                        break;
+                    case '@':
+                        newData.world[i][j] = 0;
+                        break;
+                    default:
+                        newData.world[i][j] = 0;
+                }
+            })
+        })
+
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(newData)));
+        downloadAnchorNode.setAttribute("download", "default.json");
+        document.body.appendChild(downloadAnchorNode); // required for firefox
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
+
+    [...document.getElementsByTagName("td")].forEach(t => t.onclick = click)
+</script>
+</body>
+</html>
