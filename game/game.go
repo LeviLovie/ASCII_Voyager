@@ -51,7 +51,8 @@ func Game(FPS int, keys chan foo.KeyPress, save foo.GameWorld, gameName string) 
 	logrus.Debugf("Game - Main loop starting")
 	world.NeedRedraw = true
 	for {
-		world.Draw()
+		world.DrawGame()
+		world.DrawMenu()
 
 		var keyPress foo.KeyPress
 		select {

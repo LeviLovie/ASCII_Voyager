@@ -1,5 +1,7 @@
 package foo
 
+import "strconv"
+
 type GameWorld struct {
 	FPS        int     `json:"fps"`
 	NeedRedraw bool    `json:"needRedraw"`
@@ -9,7 +11,7 @@ type GameWorld struct {
 	Player     Player  `json:"player"`
 }
 
-func (g *GameWorld) Draw() {
+func (g *GameWorld) DrawGame() {
 	if !g.NeedRedraw {
 		return
 	}
@@ -36,15 +38,31 @@ func (g *GameWorld) Draw() {
 			MoveCursor(i, j)
 			switch g.World[j-screenWorldY][i-screenWorldX] {
 			case 0:
-				PrintAt(i, j, ".")
+				PrintAt(i, j, TEXT_LIGHT_WHITE+"."+TEXT_RESET)
 			case 1:
 				PrintAt(i, j, "#")
 			}
 		}
 	}
 
-	PrintAt(screenPlayerX, screenPlayerY, TEXT_CYAN+"@"+TEXT_RESET)
+	PrintAt(screenPlayerX, screenPlayerY, TEXT_LIGHT_CYAN+"@"+TEXT_RESET)
 	g.NeedRedraw = false
+}
+
+func (g *GameWorld) DrawMenu() {
+	for i := 1; i < TerminalHeight+1; i++ {
+		PrintAt(GameWidth+GameLeft+GameRight, i, "║")
+	}
+	PrintAt(GameWidth+GameLeft+GameRight+1+((GameMenuWidth-4)/2), 1, TEXT_LIGHT_GREEN+"MENU"+TEXT_RESET)
+	if g.Player.HP > 66 {
+		PrintAt(GameWidth+GameLeft+GameRight+3, 3, "Health: "+TEXT_GREEN+strconv.Itoa(g.Player.HP)+TEXT_RESET)
+	} else if g.Player.HP > 33 {
+		PrintAt(GameWidth+GameLeft+GameRight+3, 3, "Health: "+TEXT_YELLOW+strconv.Itoa(g.Player.HP)+TEXT_RESET)
+	} else if g.Player.HP > 0 {
+		PrintAt(GameWidth+GameLeft+GameRight+3, 3, "Health: "+TEXT_RED+strconv.Itoa(g.Player.HP)+TEXT_RESET)
+	} else {
+		PrintAt(GameWidth+GameLeft+GameRight+3, 3, "Health: "+TEXT_MAGENTA+strconv.Itoa(g.Player.HP)+TEXT_RESET)
+	}
 }
 
 func (g *GameWorld) SetPlayerPosition(x, y int) {
