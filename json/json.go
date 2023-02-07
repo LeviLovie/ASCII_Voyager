@@ -14,7 +14,7 @@ import (
 var defaultJson []byte
 
 func NewSave(name string) {
-	filename := fmt.Sprintf("./saves/%s.json", name)
+	filename := fmt.Sprintf("./saves/%s.dat", name)
 
 	if _, err := os.Stat(filename); err == nil {
 		return
@@ -27,7 +27,7 @@ func NewSave(name string) {
 }
 
 func LoadSave(name string) foo.GameWorld {
-	filename := fmt.Sprintf("./saves/%s.json", name)
+	filename := fmt.Sprintf("./saves/%s.dat", name)
 	logrus.Debug("Json - LoadSave: ", filename)
 
 	var save foo.GameWorld
@@ -50,7 +50,7 @@ func LoadSave(name string) foo.GameWorld {
 }
 
 func SaveGame(name string, save foo.GameWorld) {
-	filename := fmt.Sprintf("./saves/%s.json", name)
+	filename := fmt.Sprintf("./saves/%s.dat", name)
 
 	f, err := json.Marshal(save)
 	if err != nil {

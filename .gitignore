@@ -22,5 +22,5 @@ vendor/
 *.log
 
 # Saves
-saves/*.json
-saves/*.sav
+saves/
+saves/*.dat
