@@ -9,6 +9,7 @@ import (
 
 	"github.com/LeviiLovie/ASCII_Voyager/foo"
 	"github.com/LeviiLovie/ASCII_Voyager/game"
+	"github.com/LeviiLovie/ASCII_Voyager/json"
 	"github.com/LeviiLovie/ASCII_Voyager/menu"
 	"github.com/LeviiLovie/ASCII_Voyager/music"
 )
@@ -35,12 +36,17 @@ func keyBoardRead(keys chan foo.KeyPress) {
 }
 
 func main() {
+	var playMusic bool = false
 	foo.InitLog()
 	logrus.Debug("")
 	logrus.Debug("")
 	logrus.Debug("")
 	logrus.Debug("Starting main.go")
-	go music.Init()
+
+	if playMusic {
+		go music.Init()
+	}
+	// json.NewSave("test")
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -50,9 +56,9 @@ func main() {
 	}()
 
 	var keys = make(chan foo.KeyPress, 32)
-	var stage = 1
+	var stage = foo.StageMenu
 
-	foo.SetTerminalSize(175, 30)
+	foo.SetTerminalSize(foo.TerminalWidth, foo.TerminalHeight)
 	foo.ClearScreen()
 	foo.NotVisibleCursor()
 	defer foo.VisibleCursor()
@@ -60,14 +66,40 @@ func main() {
 	go keyBoardRead(keys)
 	logrus.Debugf("Started - keyBoardRead()")
 
+	var (
+		gameName    string
+		gameNameNew string
+		save        foo.GameWorld
+		saveNew     foo.GameWorld
+	)
 	for {
 		logrus.Debugf("Stage %d", stage)
 		switch stage {
-		case 1:
+		case foo.StageMenu:
 			stage = menu.Menu(FPS, keys)
-		case 2:
-			stage = game.Game(FPS, keys)
-		case 0:
+		case foo.StageNewGame:
+			foo.ClearScreen()
+			foo.MenuDrawLogo()
+			foo.MoveCursor(15, 15)
+			fmt.Print("Enter game name: ")
+			foo.MoveCursor(15, 16)
+			gameName = foo.GetString(keys)
+			json.NewSave(gameName)
+			save = json.LoadSave(gameName)
+			stage, gameNameNew, saveNew = game.Game(FPS, keys, save, gameName)
+			json.SaveGame(gameNameNew, saveNew)
+		case foo.StageLoadGame:
+			foo.ClearScreen()
+			foo.MenuDrawLogo()
+			foo.MoveCursor(15, 15)
+			fmt.Print("Enter game name: ")
+			foo.MoveCursor(15, 16)
+			gameName = foo.GetString(keys)
+			logrus.Infof("Loading game: '%s'", gameName)
+			save = json.LoadSave(gameName)
+			stage, gameNameNew, saveNew = game.Game(FPS, keys, save, gameName)
+			json.SaveGame(gameNameNew, saveNew)
+		case foo.StageExit:
 			logrus.Debugf("Exiting - main.go")
 			foo.ClearScreen()
 			foo.MoveCursor(0, 0)

@@ -4,15 +4,12 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/eiannone/keyboard"
 	"github.com/sirupsen/logrus"
 	easy "github.com/t-tomalak/logrus-easy-formatter"
 )
-
-var Width = 175
-var GameWidth = Width - (Width - 80)
-var Height = 40
 
 type KeyPress struct {
 	Char rune
@@ -32,6 +29,24 @@ func SetTerminalSize(x, y int) {
 func ClearScreen() {
 	// fmt.Printf("\033[H\033[2J")
 	fmt.Printf("\033[H\033[2J\033[3J")
+}
+
+func GetFilesInDir() []string {
+	root := "./saves"
+	var files []string
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() && filepath.Ext(path) != ".json" {
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		fmt.Println(err)
+	}
+	return files
 }
 
 func InitLog() {
@@ -69,7 +84,23 @@ func VisibleCursor() {
 }
 
 func MoveCursor(x, y int) {
+	if x < 0 {
+		return
+	}
+	if y < 0 {
+		return
+	}
 	fmt.Printf("\033[%d;%dH", y, x)
+}
+
+func PrintAt(x, y int, text string, args ...interface{}) {
+	if x < 0 {
+		return
+	}
+	if y < 0 {
+		return
+	}
+	fmt.Printf("\033[%d;%dH%s", y, x, fmt.Sprintf(text, args...))
 }
 
 func DrawVerticalSplitLine(height int) {
@@ -91,11 +122,6 @@ func SetColor(color string) {
 
 func ResetColor() {
 	fmt.Printf("\033[0m")
-}
-
-func PrintAt(x, y int, text string) {
-	MoveCursor(x, y)
-	fmt.Print(text)
 }
 
 func PrintAtColor(x, y int, color string, text string) {

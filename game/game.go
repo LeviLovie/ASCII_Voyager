@@ -10,7 +10,7 @@ import (
 	"github.com/LeviiLovie/ASCII_Voyager/foo"
 )
 
-func keyBoard(keyPress foo.KeyPress, world *GameWorld) int {
+func keyBoard(keyPress foo.KeyPress, world *foo.GameWorld) int {
 	switch keyPress.Key {
 	case keyboard.KeyEsc:
 		return 0
@@ -19,31 +19,37 @@ func keyBoard(keyPress foo.KeyPress, world *GameWorld) int {
 	switch keyPress.Char {
 	case 'w', 'W':
 		world.MovePlayerUp()
+		world.NeedRedraw = true
 	case 's', 'S':
 		world.MovePlayerDown()
+		world.NeedRedraw = true
 	case 'a', 'A':
 		world.MovePlayerLeft()
+		world.NeedRedraw = true
 	case 'd', 'D':
 		world.MovePlayerRight()
+		world.NeedRedraw = true
 	}
 
 	return 1
 }
 
-func Game(FPS int, keys chan foo.KeyPress) int {
+func Game(FPS int, keys chan foo.KeyPress, save foo.GameWorld, gameName string) (foo.Stage, string, foo.GameWorld) {
 	logrus.Debugf("Starting - Game.go")
 
 	foo.ClearScreen()
 	foo.NotVisibleCursor()
 	defer foo.VisibleCursor()
 
-	var world = &GameWorld{}
-	world.Init()
+	var world *foo.GameWorld = &save
+	logrus.Debugf("Game - save = '%s'", save)
+
 	logrus.Debugf("Game - Done - Init world")
 	logrus.Infof("Game - World size: %dx%d", world.Width, world.Height)
-	logrus.Infof("Game - Player position: %dx%d", world.PlayerPositionX, world.PlayerPositionY)
+	logrus.Infof("Game - Player position: %dx%d", world.Player.X, world.Player.Y)
 
 	logrus.Debugf("Game - Main loop starting")
+	world.NeedRedraw = true
 	for {
 		world.Draw()
 
@@ -59,7 +65,7 @@ func Game(FPS int, keys chan foo.KeyPress) int {
 			foo.ClearScreen()
 			foo.MoveCursor(0, 0)
 			fmt.Println("Goodbye!")
-			return 1
+			return foo.StageMenu, gameName, *world
 		}
 		time.Sleep(time.Second / 30)
 	}
