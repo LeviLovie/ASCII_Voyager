@@ -109,7 +109,7 @@ func main() {
 			fmt.Print("Enter game name: ")
 			foo.MoveCursor(15, 16)
 			gameName = foo.GetString(keys)
-			json.NewSave(gameName)
+			json.NewSave(gameName, keys)
 			save = json.LoadSave(gameName)
 			stage, gameNameNew, saveNew = game.Game(FPS, keys, save, gameName)
 			json.SaveGame(gameNameNew, saveNew)

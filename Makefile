@@ -3,7 +3,7 @@
 run:
 	@go run main.go
 
-runOffMus:
+no-music:
 	@go run main.go --no-music
 
 editor:
