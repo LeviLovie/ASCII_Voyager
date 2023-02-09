@@ -13,20 +13,29 @@
             width: 100%;
             background-color: black;
             color: white;
-            font: 1.3rem Inconsolata, monospace;
+            font: 1rem Inconsolata, monospace;
             text-shadow: 0 0 5px #C8C8C8;
         }
-        body {
+        #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 200px;
+            bottom: 0;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+        }
+        #world {
+            overflow: auto;
+            margin: auto;
         }
         table {
             border-collapse: collapse;
+            font-size: 1.5rem;
         }
         td {
             font-family: monospace;
-            /*border: 1px solid #333;*/
             height: 40px;
             width: 20px;
             text-align: center;
@@ -38,16 +47,35 @@
             background-color: #333;
         }
         #controls {
-            position: absolute;
-            bottom: 0;
-            left: 0;
+            position: fixed;
+            top: 0;
             right: 0;
+            bottom: 0;
+            width: 200px;
             padding: 1rem;
             display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1rem;
+            border-left: 1px solid #333;
+        }
+        #position {
+            flex: 0;
+            font-size: 1.5rem;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+        #element {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
             justify-content: center;
             gap: 1rem;
         }
-        #controls button {
+        #element button {
             padding: 0.5rem 1rem;
             font-size: 1rem;
             border: none;
@@ -56,63 +84,142 @@
             color: white;
             cursor: pointer;
         }
-        #controls button:hover {
+        #element button:hover {
             background-color: #555;
         }
-        #controls button.selected {
+        #element button.selected {
             background-color: #777;
+        }
+        #save {
+            flex: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        #save button {
+            width: 200px;
+            padding: 0.5rem 1rem;
+            font-size: 1.5rem;
+            border: none;
+            background-color: #333;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+        #save button:hover {
+            background-color: #555;
         }
     </style>
 </head>
 <body>
-    <table>
-        {{ range $r, $row := .world }}
-            <tr>
-            {{ range $c, $cell := $row }}
-                <td>
-                    {{ if and (eq $r $.playerX) (eq $c $.playerY) }}
-                        @
-                    {{ else }}
-                        {{ if eq $cell 0 }}
-                            .
-                        {{ else }}
-                            {{ if eq $cell 1 }}
-                            #
-                            {{ else }}
-                            {{ $cell }}
-                            {{ end }}
-                        {{ end }}
-                    {{ end }}
-                </td>
-            {{ end }}
-            </tr>
-        {{ end }}
-    </table>
+    <div id="map">
+        <div id="world"></div>
+    </div>
     <div id="controls">
-        <button id="space" onclick="setValue('.')" class="selected">.</button>
-        <button id="wall" onclick="setValue('#')">#</button>
-        <button onclick="save()">Save</button>
+        <div id="position">&nbsp;</div>
+        <div id="element">
+            <button id="player" onclick="setValue(playerChar)" title="Player">@</button>
+            <button id="space" onclick="setValue(data2char['0'])" class="selected" title="Empty">.</button>
+            <button id="wall" onclick="setValue(data2char['1'])" title="Wall">#</button>
+        </div>
+        <div id="save">
+            <button onclick="changeSize()">Resize</button>
+            <button onclick="download()">Download</button>
+        </div>
     </div>
 <script>
-    let value = "."
     const data = JSON.parse("{{ .saveRaw }}");
+
+    const data2char = {
+        0: ".",
+        1: "#",
+    }
+    const char2data = {
+        ".": 0,
+        "#": 1,
+    }
+    const playerChar = '@';
+
+    let insertMode = false;
+    let value = "."
 
     function setValue(val) {
         value = val;
-        if (val === ".") {
-            document.getElementById("wall").classList.remove("selected");
+
+        document.getElementById("player").classList.remove("selected");
+        document.getElementById("space").classList.remove("selected");
+        document.getElementById("wall").classList.remove("selected");
+
+        if (val === "@") {
+            document.getElementById("player").classList.add("selected");
+        } else if (val === ".") {
             document.getElementById("space").classList.add("selected");
         } else if (val === "#") {
-            document.getElementById("space").classList.remove("selected");
             document.getElementById("wall").classList.add("selected");
         }
     }
 
-    function click(event) {
-        event.target.innerHTML = value;
+    function redraw() {
+        const table = document.createElement("table");
+        for (let i = 0; i < data.world.length; i++) {
+            const tr = document.createElement("tr");
+            for (let j = 0; j < data.world[i].length; j++) {
+                const td = document.createElement("td");
+                td.dataset.x = j;
+                td.dataset.y = i;
+                if (i === data.player.x && j === data.player.y) {
+                    td.innerHTML = playerChar;
+                } else {
+                    td.innerHTML = data2char[data.world[i][j]] || " ";
+                }
+                tr.appendChild(td);
+            }
+            table.appendChild(tr);
+        }
+
+        const world = document.getElementById("world");
+        if (world) {
+            [...world.children].map(c => world.removeChild(c));
+            world.appendChild(table);
+        }
     }
 
-    function save() {
+    function changeSize() {
+        const width = parseInt(prompt("New width:", data.width));
+        const height = parseInt(prompt("New height:", data.height));
+
+        if (isNaN(width) || isNaN(height) || width < 1 || height < 1) {
+            alert("Invalid size");
+            return;
+        }
+
+        if (width < data.width || height < data.height) {
+            if (!confirm("Are you sure you want to shrink the map?")) {
+                return;
+            }
+        }
+
+        const newWorld = [];
+        for (let i = 0; i < height; i++) {
+            newWorld[i] = [];
+            for (let j = 0; j < width; j++) {
+                if (i < data.world.length && j < data.world[i].length) {
+                    newWorld[i][j] = data.world[i][j];
+                } else {
+                    newWorld[i][j] = 0;
+                }
+            }
+        }
+        data.world = newWorld;
+        data.width = width;
+        data.height = height;
+
+        redraw();
+    }
+
+    function download() {
         let newData = {...data, world: []};
 
         [...document.getElementsByTagName("tr")].forEach((tr, i) => {
@@ -143,7 +250,41 @@
         downloadAnchorNode.remove();
     }
 
-    [...document.getElementsByTagName("td")].forEach(t => t.onclick = click)
+    document.addEventListener("DOMContentLoaded", function() {
+        document.body.addEventListener('mousedown', (event) => {
+            if (event.target.tagName.toUpperCase() === "TD") {
+                insertMode = true;
+            }
+        });
+        document.body.addEventListener('mousemove', (event) => {
+            if (event.target.tagName.toUpperCase() === "TD") {
+                if (insertMode) {
+                    const x = parseInt(event.target.dataset.x);
+                    const y = parseInt(event.target.dataset.y);
+                    if (value === playerChar) {
+                        data.player.x = y;
+                        data.player.y = x;
+                        redraw();
+                    } else if (x === data.player.y && y === data.player.x) {
+                        return; // do nothing - player position
+                    } else {
+                        const newValue = char2data[value] || 0;
+                        if (newValue !== data.world[y][x]) {
+                            data.world[y][x] = newValue;
+                            redraw();
+                        }
+                    }
+                }
+                document.getElementById("position").innerHTML = `x: ${event.target.dataset.x}, y: ${event.target.dataset.y}`;
+            } else {
+                document.getElementById("position").innerHTML = "&nbsp;";
+            }
+        });
+        document.body.addEventListener('mouseup', () => {
+            insertMode = false;
+        });
+        redraw();
+    });
 </script>
 </body>
 </html>
