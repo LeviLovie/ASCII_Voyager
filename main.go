@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/LeviiLovie/ASCII_Voyager/editor"
-
 	"github.com/eiannone/keyboard"
 	"github.com/sirupsen/logrus"
 
+	"github.com/LeviiLovie/ASCII_Voyager/editor"
 	"github.com/LeviiLovie/ASCII_Voyager/foo"
 	"github.com/LeviiLovie/ASCII_Voyager/game"
 	"github.com/LeviiLovie/ASCII_Voyager/json"

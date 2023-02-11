@@ -1,6 +1,3 @@
-//go:build !windows
-// +build !windows
-
 package foo
 
 import "fmt"
@@ -57,7 +54,13 @@ func PrintAt(x, y int, text string, args ...interface{}) {
 	if x < 0 {
 		return
 	}
+	if x > TerminalWidth {
+		return
+	}
 	if y < 0 {
+		return
+	}
+	if y > TerminalHeight {
 		return
 	}
 	fmt.Printf("\033[%d;%dH%s", y, x, fmt.Sprintf(text, args...))
