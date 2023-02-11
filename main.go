@@ -3,12 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/LeviiLovie/ASCII_Voyager/editor"
 	"os"
 
 	"github.com/eiannone/keyboard"
 	"github.com/sirupsen/logrus"
 
+	"github.com/LeviiLovie/ASCII_Voyager/editor"
 	"github.com/LeviiLovie/ASCII_Voyager/foo"
 	"github.com/LeviiLovie/ASCII_Voyager/game"
 	"github.com/LeviiLovie/ASCII_Voyager/json"
@@ -71,7 +71,6 @@ func main() {
 	if !noMusic {
 		go music.Init()
 	}
-	// json.NewSave("test")
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -109,7 +108,7 @@ func main() {
 			fmt.Print("Enter game name: ")
 			foo.MoveCursor(15, 16)
 			gameName = foo.GetString(keys)
-			json.NewSave(gameName)
+			json.NewSave(gameName, keys)
 			save = json.LoadSave(gameName)
 			stage, gameNameNew, saveNew = game.Game(FPS, keys, save, gameName)
 			json.SaveGame(gameNameNew, saveNew)

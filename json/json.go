@@ -13,7 +13,8 @@ import (
 //go:embed default.json
 var defaultJson []byte
 
-func NewSave(name string) {
+func NewSave(name string, keys chan foo.KeyPress) {
+	// cutscenes.SatrtGameCuts(keys)
 	filename := fmt.Sprintf("./saves/%s.dat", name)
 
 	if _, err := os.Stat(filename); err == nil {
