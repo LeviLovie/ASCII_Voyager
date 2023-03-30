@@ -22,21 +22,9 @@ mod:
 # Build game
 # Game
 objectGameBuild:
-	@mkdir -p build/$(VERSION)/game
-	@go build -o build/$(VERSION)/game/ASCII_Voyager main.go
+	@mkdir -p build/$(V)
+	go build -o build/$(V)/ASCII_Voyager main.go
 exeGameBuild:
-	@mkdir -p build/$(VERSION)/game
-	@GOOS=windows go build -o build/$(VERSION)/game/ASCII_Voyager.exe main.go
-
-# Editor
-objectEditorBuild:
-	@mkdir -p build/$(VERSION)/editor
-	@go build -o build/$(VERSION)/editor/ASCII_Voyager_Editor editor/editor.go
-exeEditorBuild:
-	@mkdir -p build/$(VERSION)/editor
-	@GOOS=windows go build -o build/$(VERSION)/editor/ASCII_Voyager_Editor.exe editor/editor.go
-
-# Sort Commands
-buildGame: objectGameBuild exeGameBuild
-buildEditor: objectEditorBuild exeEditorBuild
-build: buildGame buildEditor
+	@mkdir -p build/$(V)
+	GOOS=windows go build -o build/$(V)/ASCII_Voyager.exe main.go
+build: objectGameBuild exeGameBuild

@@ -91,10 +91,9 @@ func main() {
 	logrus.Debugf("Started - keyBoardRead()")
 
 	var (
-		gameName    string
-		gameNameNew string
-		save        foo.GameWorld
-		saveNew     foo.GameWorld
+		gameName string
+		result   int
+		save     foo.GameWorld
 	)
 	for {
 		logrus.Debugf("Stage %d", stage)
@@ -109,9 +108,12 @@ func main() {
 			foo.MoveCursor(15, 16)
 			gameName = foo.GetString(keys)
 			json.NewSave(gameName, keys)
-			save = json.LoadSave(gameName)
-			stage, gameNameNew, saveNew = game.Game(FPS, keys, save, gameName)
-			json.SaveGame(gameNameNew, saveNew)
+			result, save = json.LoadSave(gameName)
+			if result == 0 {
+				stage, _, _ = game.Game(FPS, keys, save, gameName)
+			} else {
+				stage = foo.StageMenu
+			}
 		case foo.StageLoadGame:
 			foo.ClearScreen()
 			foo.MenuDrawLogo()
@@ -120,9 +122,12 @@ func main() {
 			foo.MoveCursor(15, 16)
 			gameName = foo.GetString(keys)
 			logrus.Infof("Loading game: '%s'", gameName)
-			save = json.LoadSave(gameName)
-			stage, gameNameNew, saveNew = game.Game(FPS, keys, save, gameName)
-			json.SaveGame(gameNameNew, saveNew)
+			result, save = json.LoadSave(gameName)
+			if result == 0 {
+				stage, _, _ = game.Game(FPS, keys, save, gameName)
+			} else {
+				stage = foo.StageMenu
+			}
 		case foo.StageExit:
 			logrus.Debugf("Exiting - main.go")
 			foo.ClearScreen()

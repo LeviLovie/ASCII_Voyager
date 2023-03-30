@@ -32,9 +32,9 @@ func (g *GameWorld) DrawGame() {
 
 	for i := GameLeft; i < GameLeft+GameWidth; i++ {
 		for j := GameTop; j < GameTop+GameHeight; j++ {
-			// if j < screenWorldY || j >= screenWorldY+g.Height || i < screenWorldX || i >= screenWorldX+g.Width {
-			// 	continue
-			// }
+			if j < screenWorldY || j >= screenWorldY+g.Height || i < screenWorldX || i >= screenWorldX+g.Width {
+				continue
+			}
 			MoveCursor(i, j)
 			switch g.World[j-screenWorldY][i-screenWorldX] {
 			case 0:
