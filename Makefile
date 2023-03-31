@@ -1,9 +1,16 @@
 .PHONY: run editor build mod
 
 
-# Run un normal mode
+# Run in normal mode
 run:
 	@go run main.go
+
+
+# Run build
+buildrun:
+	@./build/$(V)/ASCII_Voyager
+buildrunwin:
+	@./build/$(V)/ASCII_Voyager.exe
 
 
 # Run with flags: no-music, editor
