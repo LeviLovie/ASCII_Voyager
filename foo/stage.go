@@ -6,5 +6,6 @@ const (
 	StageMenu Stage = iota
 	StageNewGame
 	StageLoadGame
+	StageCreditsGame
 	StageExit
 )

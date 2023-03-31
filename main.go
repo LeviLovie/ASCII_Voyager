@@ -128,6 +128,33 @@ func main() {
 			} else {
 				stage = foo.StageMenu
 			}
+		case foo.StageCreditsGame:
+			foo.ClearScreen()
+			foo.MoveCursor(15, 15)
+			foo.NotVisibleCursor()
+			foo.WriteTextOnCenter("Credits", foo.TerminalWidth, 4)
+
+			foo.WriteTextOnCenter("Game Developing", foo.TerminalWidth, 6)
+			foo.WriteTextOnCenter("LeviiLovie - https://github.com/LeviiLovie", foo.TerminalWidth, 7)
+			foo.WriteTextOnCenter("Dreadatour - https://github.com/dreadatour", foo.TerminalWidth, 8)
+
+			foo.WriteTextOnCenter("Game Desing", foo.TerminalWidth, 10)
+			foo.WriteTextOnCenter("Oto - ", foo.TerminalWidth, 11)
+
+			foo.WriteTextOnCenter("Testing", foo.TerminalWidth, 13)
+			foo.WriteTextOnCenter("Dreadatour - https://github.com/dreadatour", foo.TerminalWidth, 14)
+
+			foo.WriteTextOnCenter("Music", foo.TerminalWidth, 16)
+			foo.WriteTextOnCenter("Learunaso - https://on.soundcloud.com/v7Wkeph5BNPTfzT96", foo.TerminalWidth, 17)
+
+			foo.WriteTextOnCenter("The main motivator", foo.TerminalWidth, 19)
+			foo.WriteTextOnCenter("Hamster of the main developer", foo.TerminalWidth, 20)
+
+			foo.WriteTextOnCenter("Source code", foo.TerminalWidth, 22)
+			foo.WriteTextOnCenter("https://github.com/LeviiLovie/ASCII_Voyager", foo.TerminalWidth, 23)
+
+			<-keys
+			stage = foo.StageMenu
 		case foo.StageExit:
 			logrus.Debugf("Exiting - main.go")
 			foo.ClearScreen()

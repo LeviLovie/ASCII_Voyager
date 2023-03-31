@@ -8,6 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/LeviiLovie/ASCII_Voyager/foo"
+	"github.com/LeviiLovie/ASCII_Voyager/json"
 )
 
 func keyBoard(keyPress foo.KeyPress, world *foo.GameWorld) int {
@@ -42,7 +43,7 @@ func Game(FPS int, keys chan foo.KeyPress, save foo.GameWorld, gameName string) 
 	defer foo.VisibleCursor()
 
 	var world *foo.GameWorld = &save
-	logrus.Debugf("Game - save = '%s'", save)
+	json.CheckVersions(world)
 
 	logrus.Debugf("Game - Done - Init world")
 	logrus.Infof("Game - World size: %dx%d", world.Width, world.Height)

@@ -64,6 +64,9 @@ func Menu(FPS int, keys chan foo.KeyPress) foo.Stage {
 			case foo.MenuItemLoadGame:
 				logrus.Debugf("Menu - Starting - Load Game")
 				return foo.StageLoadGame
+			case foo.MenuItemCredits:
+				logrus.Debugf("Menu - Starting - Credits")
+				return foo.StageCreditsGame
 			case foo.MenuItemExit:
 				logrus.Debugf("Menu - Exit")
 				foo.ClearScreen()

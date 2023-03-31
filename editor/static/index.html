@@ -114,6 +114,7 @@
     </style>
 </head>
 <body>
+    <!-- <p style="position: absolute; left: 5px; top: -7px; font-size: 7; color: #777; text-shadow: none;">Version of save .dat file structure: 2</p> -->
     <div id="map">
         <div id="world"></div>
     </div>
@@ -131,15 +132,17 @@
     </div>
 <script>
     const data = JSON.parse("{{ .saveRaw }}");
-
-    const data2char = {
-        0: ".",
-        1: "#",
+    let data2char = {}
+    let char2data = {}
+    for (let i = 0; i < data.blocks.length; i++) {
+        data2char[i] = data.blocks[i];
     }
-    const char2data = {
-        ".": 0,
-        "#": 1,
+    for (let i = 0; i < data.blocks.length; i++) {
+        char2data[data.blocks[i]] = i;
     }
+    console.log(data2char, char2data)
+    console.log(data)
+    console.log(data.blocks)
     const playerChar = '@';
 
     let insertMode = false;
