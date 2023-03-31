@@ -22,13 +22,13 @@ func (g *GameWorld) DrawGame() {
 	screenPlayerY := GameHeight/2 + GameTop
 
 	screenWorldX := screenPlayerX - g.Player.X
-	if screenWorldX < GameLeft {
-		screenWorldX = GameLeft
-	}
+	// if screenWorldX < GameLeft {
+	// 	screenWorldX = GameLeft
+	// }
 	screenWorldY := screenPlayerY - g.Player.Y
-	if screenWorldY < GameTop {
-		screenWorldY = GameTop
-	}
+	// if screenWorldY < GameTop {
+	// 	screenWorldY = GameTop
+	// }
 
 	for i := GameLeft; i < GameLeft+GameWidth; i++ {
 		for j := GameTop; j < GameTop+GameHeight; j++ {
