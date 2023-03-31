@@ -13,6 +13,37 @@ import (
 //go:embed default.json
 var defaultJson []byte
 
+//go:embed config.json
+var configJson []byte
+
+type Config struct {
+	RequitSaveFileVersion float32 `json:"version_requit_to_save_file"`
+}
+
+func CheckVersions(world *foo.GameWorld) {
+	logrus.Debug("Json - checking versions: ")
+
+	var config Config
+	err := json.Unmarshal(configJson, &config)
+	if err != nil {
+		logrus.Error("Json - CheckVersions: ", err)
+	}
+
+	logrus.Info("Json - Save file version: ", world.Version)
+	logrus.Info("Json - Required save file version: ", config.RequitSaveFileVersion)
+
+	if world.Version != config.RequitSaveFileVersion {
+		foo.ClearScreen()
+		foo.MoveCursor(0, 0)
+		fmt.Println("Save file is outdated, please choose another save file.")
+		foo.VisibleCursor()
+		logrus.Debugf("Save file is outdated")
+		os.Exit(0)
+	}
+
+	logrus.Debug("Json - Done - checking versions")
+}
+
 func NewSave(name string, keys chan foo.KeyPress) int {
 	// cutscenes.SatrtGameCuts(keys)
 	filename := fmt.Sprintf("./saves/%s.dat", name)
@@ -41,8 +72,6 @@ func LoadSave(name string) (int, foo.GameWorld) {
 		logrus.Error("Json - LoadSave: ", err)
 		return 1, save
 	}
-
-	logrus.Debug("Json - LoadSave: ", string(f))
 
 	err = json.Unmarshal(f, &save)
 	if err != nil {

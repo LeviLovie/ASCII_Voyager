@@ -1,14 +1,18 @@
 package foo
 
-import "strconv"
+import (
+	"strconv"
+)
 
 type GameWorld struct {
-	FPS        int     `json:"fps"`
-	NeedRedraw bool    `json:"needRedraw"`
-	Width      int     `json:"width"`
-	Height     int     `json:"height"`
-	World      [][]int `json:"world"`
-	Player     Player  `json:"player"`
+	FPS        int      `json:"fps"`
+	NeedRedraw bool     `json:"needRedraw"`
+	Width      int      `json:"width"`
+	Height     int      `json:"height"`
+	World      [][]int  `json:"world"`
+	Player     Player   `json:"player"`
+	Version    float32  `json:"save_version"`
+	Blocks     []string `json:"blocks"`
 }
 
 func (g *GameWorld) DrawGame() {
@@ -22,13 +26,7 @@ func (g *GameWorld) DrawGame() {
 	screenPlayerY := GameHeight/2 + GameTop
 
 	screenWorldX := screenPlayerX - g.Player.X
-	// if screenWorldX < GameLeft {
-	// 	screenWorldX = GameLeft
-	// }
 	screenWorldY := screenPlayerY - g.Player.Y
-	// if screenWorldY < GameTop {
-	// 	screenWorldY = GameTop
-	// }
 
 	for i := GameLeft; i < GameLeft+GameWidth; i++ {
 		for j := GameTop; j < GameTop+GameHeight; j++ {
@@ -36,11 +34,11 @@ func (g *GameWorld) DrawGame() {
 				continue
 			}
 			MoveCursor(i, j)
-			switch g.World[j-screenWorldY][i-screenWorldX] {
-			case 0:
-				PrintAt(i, j, TEXT_LIGHT_WHITE+"."+TEXT_RESET)
-			case 1:
-				PrintAt(i, j, "#")
+
+			for k := 0; k < len(g.Blocks); k++ {
+				if g.World[j-screenWorldY][i-screenWorldX] == k {
+					PrintAt(i, j, g.Blocks[k])
+				}
 			}
 		}
 	}
