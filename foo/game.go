@@ -47,19 +47,46 @@ func (g *GameWorld) DrawGame() {
 	g.NeedRedraw = false
 }
 
-func (g *GameWorld) DrawMenu() {
+func (g *GameWorld) DrawPauseMenu() {
 	for i := 1; i < TerminalHeight+1; i++ {
 		PrintAt(GameWidth+GameLeft+GameRight, i, "║")
 	}
-	PrintAt(GameWidth+GameLeft+GameRight+1+((GameMenuWidth-4)/2), 1, TEXT_LIGHT_GREEN+"MENU"+TEXT_RESET)
-	if g.Player.HP > 66 {
-		PrintAt(GameWidth+GameLeft+GameRight+3, 3, "Health: "+TEXT_GREEN+strconv.Itoa(g.Player.HP)+TEXT_RESET)
-	} else if g.Player.HP > 33 {
-		PrintAt(GameWidth+GameLeft+GameRight+3, 3, "Health: "+TEXT_YELLOW+strconv.Itoa(g.Player.HP)+TEXT_RESET)
-	} else if g.Player.HP > 0 {
-		PrintAt(GameWidth+GameLeft+GameRight+3, 3, "Health: "+TEXT_RED+strconv.Itoa(g.Player.HP)+TEXT_RESET)
+	PrintAt(GameWidth+GameLeft+GameRight+1+((GameMenuWidth-10)/2), 1, TEXT_LIGHT_GREEN+"PAUSE MENU"+TEXT_RESET)
+
+	PrintAt(GameWidth+GameLeft+GameRight+3, 3, "Exit Pause Menu: "+TEXT_GREEN+"TAB"+TEXT_RESET)
+	PrintAt(GameWidth+GameLeft+GameRight+3, 4, "Exit Game: "+TEXT_GREEN+"ESC"+TEXT_RESET)
+}
+
+func (g *GameWorld) DrawMenu(isDevMode bool, isPauseMenu bool) {
+	if isPauseMenu {
+		g.DrawPauseMenu()
 	} else {
-		PrintAt(GameWidth+GameLeft+GameRight+3, 3, "Health: "+TEXT_MAGENTA+strconv.Itoa(g.Player.HP)+TEXT_RESET)
+		for i := 1; i < TerminalHeight+1; i++ {
+			PrintAt(GameWidth+GameLeft+GameRight, i, "║")
+		}
+
+		PrintAt(GameWidth+GameLeft+GameRight+1+((GameMenuWidth-4)/2), 1, TEXT_LIGHT_GREEN+"MENU"+TEXT_RESET)
+		if g.Player.HP > 66 {
+			PrintAt(GameWidth+GameLeft+GameRight+3, 3, "Health: "+TEXT_GREEN+strconv.Itoa(g.Player.HP)+TEXT_RESET)
+		} else if g.Player.HP > 33 {
+			PrintAt(GameWidth+GameLeft+GameRight+3, 3, "Health: "+TEXT_YELLOW+strconv.Itoa(g.Player.HP)+TEXT_RESET)
+		} else if g.Player.HP > 0 {
+			PrintAt(GameWidth+GameLeft+GameRight+3, 3, "Health: "+TEXT_RED+strconv.Itoa(g.Player.HP)+TEXT_RESET)
+		} else {
+			PrintAt(GameWidth+GameLeft+GameRight+3, 3, "Health: "+TEXT_MAGENTA+strconv.Itoa(g.Player.HP)+TEXT_RESET)
+		}
+
+		if isDevMode {
+			PrintAt(GameWidth+GameLeft+GameRight+1+((GameMenuWidth-14)/2), 12, TEXT_LIGHT_CYAN+"Dev Mode Info"+TEXT_RESET)
+
+			PrintAt(GameWidth+GameLeft+GameRight+3, 13, "FPS Requit:              "+TEXT_CYAN+strconv.Itoa(g.FPS)+TEXT_RESET)
+			PrintAt(GameWidth+GameLeft+GameRight+3, 14, "World Save File Version: "+TEXT_CYAN+strconv.FormatFloat(float64(g.Version), 'f', 1, 64)+TEXT_RESET)
+			PrintAt(GameWidth+GameLeft+GameRight+3, 15, "World Height:            "+TEXT_CYAN+strconv.Itoa(g.Height)+TEXT_RESET)
+			PrintAt(GameWidth+GameLeft+GameRight+3, 16, "World Width:             "+TEXT_CYAN+strconv.Itoa(g.Width)+TEXT_RESET)
+			PrintAt(GameWidth+GameLeft+GameRight+3, 17, "Player HP:               "+TEXT_CYAN+strconv.Itoa(g.Player.HP)+TEXT_RESET)
+			PrintAt(GameWidth+GameLeft+GameRight+3, 18, "Player X:                "+TEXT_CYAN+strconv.Itoa(g.Player.X)+TEXT_RESET)
+			PrintAt(GameWidth+GameLeft+GameRight+3, 19, "Player Y:                "+TEXT_CYAN+strconv.Itoa(g.Player.Y)+TEXT_RESET)
+		}
 	}
 }
 
